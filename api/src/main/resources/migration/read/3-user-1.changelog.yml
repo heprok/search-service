@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 3-user-1
+      id: user-1
       author: oleg@briolink.com
       changes:
         - createTable:
@@ -59,13 +59,6 @@ databaseChangeLog:
         - createIndex:
             columns:
               - column:
-                  name: price
-            indexName: idx_user_price
-            schemaName: read
-            tableName: user
-        - createIndex:
-            columns:
-              - column:
                   name: verified_uses
             indexName: idx_user_verified_uses
             schemaName: read
@@ -76,7 +69,7 @@ databaseChangeLog:
                   name: industry_id
             indexName: idx_user_industry_id
             schemaName: read
-            tableName: company
+            tableName: user
         - createIndex:
             columns:
               - column:
@@ -98,4 +91,9 @@ databaseChangeLog:
             indexName: idx_user_city_id
             schemaName: read
             tableName: user
-
+        - sql:
+            sql: create index idx_user_industry_ids on read.user using gin (industry_ids)
+        - sql:
+            sql: create index idx_user_work_on_company_ids on read.user using gin (work_on_company_ids)
+        - sql:
+            sql: create index idx_user_title_position_ids on read.user using gin (title_position_ids)

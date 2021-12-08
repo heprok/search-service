@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1-company-1
+      id: company-1
       author: oleg@briolink.com
       changes:
         - createTable:
@@ -88,3 +88,6 @@ databaseChangeLog:
             indexName: idx_company_city_id
             schemaName: read
             tableName: company
+        - sql:
+            sql: create index idx_company_company_role_ids on read.user using gin (company_role_ids)
+

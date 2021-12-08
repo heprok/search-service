@@ -1,7 +1,5 @@
-scalar Date
 scalar Upload
 scalar Url
-scalar Year
 
 directive @skipcodegen on FIELD_DEFINITION
 
@@ -18,37 +16,9 @@ enum SortDirection{
     ASC, DESC
 }
 
-type TabItemsCount {
-    key: String!
-    count: Int!
-}
-
-input RangeInt {
-    start: Int
-    end: Int
-}
-
-input RangeYear {
-    start: Year
-    end: Year
-}
-
 input RangeFloat {
     start: Float
     end: Float
-}
-
-interface BaseResult {
-    success: Boolean
-}
-
-type DelOrHideResult implements BaseResult & ResultWithUserErrors {
-    success: Boolean!
-    userErrors: [Error]!
-}
-
-interface ResultWithUserErrors {
-    userErrors: [Error]!
 }
 
 interface PaginatedList {

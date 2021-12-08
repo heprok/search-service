@@ -1,0 +1,61 @@
+databaseChangeLog:
+  - changeSet:
+      id: company-2
+      author: oleg@briolink.com
+      changes:
+        - createTable:
+            schemaName: read
+            tableName: company_industry
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+        - sql:
+            sql: create index idx_company_industry_name on read.company_industry using gin (to_tsvector('simple', name))
+        - createTable:
+            schemaName: read
+            tableName: company_occupation
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+        - sql:
+            sql: create index idx_company_occupation_name on read.company_occupation using gin (to_tsvector('simple', name))
+        - createTable:
+            schemaName: read
+            tableName: company_role
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: type
+                  type: tinyint
+                  constraints:
+                    nullable: false
+        - sql:
+            sql: create index idx_company_role_name on read.company_role using gin (to_tsvector('simple', name))

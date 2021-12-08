@@ -1,0 +1,10 @@
+type User {
+    firstName: String!
+    lastName: String!
+    slug: String!
+    image: Image
+    jobPosition: String
+    location: String
+    placeOfWork: Company
+    numberOfVerification: Int!
+}

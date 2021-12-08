@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: user-2
+      author: oleg@briolink.com
+      changes:
+        - createTable:
+            schemaName: read
+            tableName: job_position_title
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+        - sql:
+            sql: create index idx_job_position_title_name on read.job_position_title using gin (to_tsvector('simple', name))

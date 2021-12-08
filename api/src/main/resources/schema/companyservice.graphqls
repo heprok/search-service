@@ -1,0 +1,8 @@
+type CompanyService {
+    name: String!
+    slug: String!
+    image: Image
+    company: Company!
+    price: Float
+    numberOfUses: Int!
+}

@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 2-companyservice-1
+      id: companyservice-1
       author: oleg@briolink.com
       changes:
         - createTable:
@@ -82,7 +82,7 @@ databaseChangeLog:
                   name: industry_id
             indexName: idx_company_service_industry_id
             schemaName: read
-            tableName: company
+            tableName: company_service
         - createIndex:
             columns:
               - column:

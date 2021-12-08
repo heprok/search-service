@@ -1,0 +1,9 @@
+type Company {
+    name: String!
+    slug: String!
+    logo: Image
+    location: String
+    roles: [String]!
+    description: String
+    numberOfVerification: Int!
+}
