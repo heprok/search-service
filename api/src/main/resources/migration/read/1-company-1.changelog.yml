@@ -1,0 +1,90 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-company-1
+      author: oleg@briolink.com
+      changes:
+        - createTable:
+            tableName: company
+            schemaName: read
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: industry_id
+                  type: uuid
+              - column:
+                  name: occupation_id
+                  type: uuid
+              - column:
+                  name: company_role_ids
+                  type: uuid[]
+              - column:
+                  name: number_of_verification
+                  type: int
+              - column:
+                  name: country_id
+                  type: int
+              - column:
+                  name: state_id
+                  type: int
+              - column:
+                  name: city_id
+                  type: int
+              - column:
+                  name: data
+                  type: jsonb
+                  constraints:
+                    nullable: false
+        - createIndex:
+            columns:
+              - column:
+                  name: industry_id
+            indexName: idx_company_industry_id
+            schemaName: read
+            tableName: company
+        - sql:
+            sql: create index idx_company_name on read.company using gin (to_tsvector('simple', name))
+        - createIndex:
+            columns:
+              - column:
+                  name: occupation_id
+            indexName: idx_company_occupation_id
+            schemaName: read
+            tableName: company
+        - createIndex:
+            columns:
+              - column:
+                  name: number_of_verification
+            indexName: idx_company_number_of_verification
+            schemaName: read
+            tableName: company
+        - createIndex:
+            columns:
+              - column:
+                  name: country_id
+            indexName: idx_company_country_id
+            schemaName: read
+            tableName: company
+        - createIndex:
+            columns:
+              - column:
+                  name: state_id
+            indexName: idx_company_state_id
+            schemaName: read
+            tableName: company
+        - createIndex:
+            columns:
+              - column:
+                  name: city_id
+            indexName: idx_company_city_id
+            schemaName: read
+            tableName: company

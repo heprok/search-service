@@ -1,0 +1,26 @@
+type Mutation{
+    #    Company
+    createCompany(input: CreateCompanyInput!) : Company
+    uploadCompanyImage(id: ID!, image: Upload) : Url
+    updateCompany(id: ID!, input: UpdateCompanyInput!) : UpdateCompanyResult
+#    deleteCompany(id: ID!) : Boolean!
+
+    #    Industry
+    createIndustry(input: CreateIndustryInput!) : CreateIndustryResult!
+    #    deleteIndustry(id: ID!) : Boolean!
+
+    #    Occupation
+    createOccupation(input: CreateOccupationInput!) : CreateOccupationResult!
+
+    #    KeyWord
+    createKeyword(input: CreateKeywordInput!) : CreateKeywordResult!
+
+    hideCompanyConnection(companyId: ID!, connectionId: ID!, isHide: Boolean!) : DelOrHideResult!
+    deleteCompanyConnection(companyId: ID!, connectionId: ID!) : DelOrHideResult!
+    #    User ( company Stuff)
+#    createEmployee(input: CreateUserInput!) : User!
+    getAllPermission(userId: ID) : Boolean
+    # Service
+    hideCompanyService(companyId: ID!, serviceId: ID!): DelOrHideResult!
+    deleteCompanyService(companyId: ID!, serviceId: ID!) : DelOrHideResult!
+}

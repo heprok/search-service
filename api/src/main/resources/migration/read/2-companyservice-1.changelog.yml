@@ -1,0 +1,107 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2-companyservice-1
+      author: oleg@briolink.com
+      changes:
+        - createTable:
+            tableName: company_service
+            schemaName: read
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: company_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: industry_id
+                  type: uuid
+              - column:
+                  name: number_of_uses
+                  type: int
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: currency
+              - column:
+                  name: is_hidden
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: country_id
+                  type: int
+              - column:
+                  name: state_id
+                  type: int
+              - column:
+                  name: city_id
+                  type: int
+              - column:
+                  name: data
+                  type: jsonb
+                  constraints:
+                    nullable: false
+        - createIndex:
+            columns:
+              - column:
+                  name: company_id
+            indexName: idx_company_service_company_id
+            schemaName: read
+            tableName: company_service
+        - sql:
+            sql: create index idx_company_service_name on read.company_service using gin (to_tsvector('simple', name))
+        - createIndex:
+            columns:
+              - column:
+                  name: price
+            indexName: idx_company_service_price
+            schemaName: read
+            tableName: company_service
+        - createIndex:
+            columns:
+              - column:
+                  name: verified_uses
+            indexName: idx_company_service_verified_uses
+            schemaName: read
+            tableName: company_service
+        - createIndex:
+            columns:
+              - column:
+                  name: industry_id
+            indexName: idx_company_service_industry_id
+            schemaName: read
+            tableName: company
+        - createIndex:
+            columns:
+              - column:
+                  name: country_id
+            indexName: idx_company_service_country_id
+            schemaName: read
+            tableName: company_service
+        - createIndex:
+            columns:
+              - column:
+                  name: state_id
+            indexName: idx_company_service_state_id
+            schemaName: read
+            tableName: company_service
+        - createIndex:
+            columns:
+              - column:
+                  name: city_id
+            indexName: idx_company_service_city_id
+            schemaName: read
+            tableName: company_service
+

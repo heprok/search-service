@@ -1,0 +1,3 @@
+databaseChangeLog:
+  - include:
+      file: migration/read/1-company-1.changelog.yml
