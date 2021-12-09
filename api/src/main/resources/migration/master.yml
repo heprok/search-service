@@ -1,3 +1,11 @@
 databaseChangeLog:
   - include:
       file: migration/read/1-company-1.changelog.yml
+  - include:
+      file: migration/read/2-companyservice-1.changelog.yml
+  - include:
+      file: migration/read/3-user-1.changelog.yml
+  - include:
+      file: migration/read/4-company-2.changelog.yml
+  - include:
+      file: migration/read/5-user-2.changelog.yml
