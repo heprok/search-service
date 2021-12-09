@@ -77,8 +77,8 @@ databaseChangeLog:
         - createIndex:
             columns:
               - column:
-                  name: verified_uses
-            indexName: idx_company_service_verified_uses
+                  name: number_of_uses
+            indexName: idx_company_service_number_of_uses
             schemaName: read
             tableName: company_service
         - createIndex:

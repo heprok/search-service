@@ -99,5 +99,5 @@ databaseChangeLog:
             schemaName: read
             tableName: company
         - sql:
-            sql: create index idx_company_company_role_ids on read.user using gin (company_role_ids)
+            sql: create index idx_company_company_role_ids on read.company using gin (company_role_ids)
 
