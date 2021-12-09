@@ -49,6 +49,9 @@ databaseChangeLog:
                   name: city_id
                   type: int
               - column:
+                  name: keywords
+                  type: text
+              - column:
                   name: data
                   type: jsonb
                   constraints:
@@ -60,6 +63,8 @@ databaseChangeLog:
             indexName: idx_company_service_company_id
             schemaName: read
             tableName: company_service
+        - sql:
+            sql: create index idx_company_service_keywords on read.company_service using gin (to_tsvector('simple', keywords))
         - sql:
             sql: create index idx_company_service_name on read.company_service using gin (to_tsvector('simple', name))
         - createIndex:

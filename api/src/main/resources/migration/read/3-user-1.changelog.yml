@@ -22,7 +22,10 @@ databaseChangeLog:
                   name: industry_idы
                   type: uuid[]
               - column:
-                  name: work_on_company_ids
+                  name: current_place_of_work_id
+                  type: uuid
+              - column:
+                  name: previous_place_of_work_ids
                   type: uuid[]
               - column:
                   name: title_position_ids
@@ -43,6 +46,9 @@ databaseChangeLog:
                   name: city_id
                   type: int
               - column:
+                  name: keywords
+                  type: text
+              - column:
                   name: data
                   type: jsonb
                   constraints:
@@ -54,8 +60,22 @@ databaseChangeLog:
             indexName: idx_user_company_id
             schemaName: read
             tableName: user
+        - createIndex:
+            columns:
+              - column:
+                  name: current_place_of_work_id
+            indexName: idx_user_current_place_of_work_id
+            schemaName: read
+            tableName: user
+        - createIndex:
+            columns:
+              - column:
+                  name: full_name
+            indexName: idx_user_full_name
+            schemaName: read
+            tableName: user
         - sql:
-            sql: create index idx_user_full_name on read.user using gin (to_tsvector('simple', full_name))
+            sql: create index idx_user_keywords on read.user using gin (to_tsvector('simple', keywords))
         - createIndex:
             columns:
               - column:
@@ -94,6 +114,6 @@ databaseChangeLog:
         - sql:
             sql: create index idx_user_industry_ids on read.user using gin (industry_ids)
         - sql:
-            sql: create index idx_user_work_on_company_ids on read.user using gin (work_on_company_ids)
+            sql: create index idx_user_previous_place_of_work_ids on read.user using gin (previous_place_of_work_ids)
         - sql:
             sql: create index idx_user_title_position_ids on read.user using gin (title_position_ids)
