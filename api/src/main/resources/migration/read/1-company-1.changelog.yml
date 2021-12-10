@@ -30,6 +30,9 @@ databaseChangeLog:
               - column:
                   name: number_of_verification
                   type: int
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
               - column:
                   name: country_id
                   type: int
@@ -40,7 +43,7 @@ databaseChangeLog:
                   name: city_id
                   type: int
               - column:
-                  name: keywords
+                  name: keywords_search
                   type: text
               - column:
                   name: data
@@ -55,7 +58,7 @@ databaseChangeLog:
             schemaName: read
             tableName: company
         - sql:
-            sql: create index idx_company_keywords on read.company using gin (to_tsvector('simple', keywords))
+            sql: create index idx_company_keywords_search on read.company using gin (to_tsvector('simple', keywords_search))
         - createIndex:
             columns:
               - column:

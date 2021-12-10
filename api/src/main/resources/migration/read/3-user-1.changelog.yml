@@ -46,7 +46,7 @@ databaseChangeLog:
                   name: city_id
                   type: int
               - column:
-                  name: keywords
+                  name: keywords_search
                   type: text
               - column:
                   name: data
@@ -68,7 +68,7 @@ databaseChangeLog:
             schemaName: read
             tableName: user
         - sql:
-            sql: create index idx_user_keywords on read.user using gin (to_tsvector('simple', keywords))
+            sql: create index idx_user_keywords_search on read.user using gin (to_tsvector('simple', keywords_search))
         - createIndex:
             columns:
               - column:
