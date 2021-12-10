@@ -1,5 +1,6 @@
 package com.briolink.searchservice.common.jpa
 
+import com.briolink.searchservice.common.jpa.func.ArrayAggFunc
 import com.briolink.searchservice.common.jpa.func.JsonbGetFunc
 import com.briolink.searchservice.common.jpa.func.JsonbSetsFunc
 import org.hibernate.QueryException
@@ -28,6 +29,7 @@ class Functions : MetadataBuilderContributor {
         )
         metadataBuilder.applySqlFunction("jsonb_sets", JsonbSetsFunc())
         metadataBuilder.applySqlFunction("jsonb_get", JsonbGetFunc())
+        metadataBuilder.applySqlFunction("array_agg", ArrayAggFunc())
 
         metadataBuilder.applySqlFunction("lower", StandardSQLFunction("lower", StringType.INSTANCE))
         metadataBuilder.applySqlFunction(
