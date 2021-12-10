@@ -107,7 +107,7 @@ data class CompanyKeywordsSearch(val stringKeywords: String) {
             description = ""
             companyRoles = mutableSetOf()
         } else {
-            if (keywords.count() != 6) throw Exception("Wrong number of arguments in $stringKeywords must be 6 (name~;~industryName~;~occupationName~;~location~;~description~;~companyRoles") // ktlint-disable max-line-length
+            if (keywords.count() != 6) throw Exception("Wrong number of arguments in $stringKeywords must be 6 (companyName~;~industryName~;~occupationName~;~location~;~description~;~companyRoles") // ktlint-disable max-line-length
             companyName = keywords[0]
             industryName = keywords[1]
             occupationName = keywords[2]
