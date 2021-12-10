@@ -1,7 +1,6 @@
 package com.briolink.searchservice.common.jpa.read.entity
 
 import com.briolink.searchservice.common.dto.location.LocationInfoDto
-import com.briolink.searchservice.common.jpa.enumeration.CompanyRoleTypeEnum
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.hibernate.annotations.Type
 import java.net.URL
@@ -11,13 +10,17 @@ import javax.persistence.Entity
 import javax.persistence.Id
 import javax.persistence.Table
 
-@Table(name = "company", schema = "read")
+@Table(name = "company_service", schema = "read")
 @Entity
-class CompanyReadEntity(
+class CompanyServiceReadEntity(
     @Id
     @Type(type = "pg-uuid")
     @Column(name = "id", nullable = false)
-    val id: UUID
+    val id: UUID,
+
+    @Type(type = "pg-uuid")
+    @Column(name = "company_id", nullable = false)
+    var company_id: UUID
 ) : BaseReadEntity() {
 
     @Column(name = "name", nullable = false, length = 255)
@@ -27,16 +30,8 @@ class CompanyReadEntity(
     @Column(name = "industry_id")
     var industryId: UUID? = null
 
-    @Type(type = "pg-uuid")
-    @Column(name = "occupation_id")
-    var occupationId: UUID? = null
-
-    @Type(type = "uuid-array")
-    @Column(name = "company_role_ids", nullable = false, columnDefinition = "uuid[]")
-    var companyRoleIds: MutableList<UUID> = mutableListOf()
-
-    @Column(name = "number_of_verification", nullable = false)
-    var numberOfVerification: Int = 0
+    @Column(name = "number_of_uses", nullable = false)
+    var numberOfUses: Int = 0
 
     @Column(name = "country_id")
     var countryId: Int? = null
@@ -50,8 +45,8 @@ class CompanyReadEntity(
     @Column(name = "keywords_search")
     private lateinit var _keywordsSearch: String
 
-    var keywordsSearch: CompanyKeywordsSearch
-        get() = CompanyKeywordsSearch(_keywordsSearch)
+    var keywordsSearch: CompanyServiceKeywordsSearch
+        get() = CompanyServiceKeywordsSearch(_keywordsSearch)
         set(value) {
             _keywordsSearch = value.toString()
         }
@@ -64,69 +59,62 @@ class CompanyReadEntity(
         @JsonProperty
         var slug: String,
         @JsonProperty
-        var website: URL? = null,
-        @JsonProperty
         var description: String? = null,
         @JsonProperty
         var location: LocationInfoDto? = null,
         @JsonProperty
-        var companyRoles: MutableSet<CompanyRole> = mutableSetOf(),
-        @JsonProperty
-        var logo: URL? = null,
+        var image: URL? = null,
         @JsonProperty
         var industryName: String? = null,
-        @JsonProperty
-        var occupationName: String? = null,
+        var company: Company
     )
 
-    data class CompanyRole(
+    data class Company(
         @JsonProperty
         val id: UUID,
         @JsonProperty
         val name: String,
         @JsonProperty
-        val type: CompanyRoleTypeEnum
+        val slug: String,
+        @JsonProperty
+        val logo: URL? = null
     )
 }
 
-data class CompanyKeywordsSearch(val stringKeywords: String) {
+data class CompanyServiceKeywordsSearch(val stringKeywords: String) {
+    var serviceName: String
     var companyName: String
     var industryName: String
-    var occupationName: String
     var location: String
     var description: String
-    var companyRoles: MutableSet<String>
 
     init {
         val keywords = stringKeywords.split("~;~")
         if (keywords.isEmpty()) {
+            serviceName = ""
             companyName = ""
             industryName = ""
-            occupationName = ""
             location = ""
             description = ""
-            companyRoles = mutableSetOf()
         } else {
-            if (keywords.count() != 6) throw Exception("Wrong number of arguments in $stringKeywords must be 6 (name~;~industryName~;~occupationName~;~location~;~description~;~companyRoles") // ktlint-disable max-line-length
-            companyName = keywords[0]
-            industryName = keywords[1]
-            occupationName = keywords[2]
+            if (keywords.count() != 5) throw Exception("Wrong number of arguments in $stringKeywords must be 5 (serviceName~;~companyMame~;~industryName~;~location~;~description)") // ktlint-disable max-line-length
+            serviceName = keywords[0]
+            companyName = keywords[1]
+            industryName = keywords[2]
             location = keywords[3]
             description = keywords[4]
-            companyRoles = keywords[5].split(":").toSet() as MutableSet<String>
         }
     }
 
     constructor(
+        serviceName: String,
         companyName: String,
         industryName: String = "",
-        occupationName: String = "",
         location: String = "",
         description: String = "",
-        companyRoles: MutableSet<String> = mutableSetOf()
-    ) : this("$companyName~;~$industryName~;~$occupationName~;~$location~;~$description~;~ ${companyRoles.joinToString { ":" }}")
+    ) : this("$serviceName~;~$companyName~;~$industryName~;~$location~;~$description")
 
     override fun toString(): String {
-        return "$companyName~;~$industryName~;~$occupationName~;~$location~;~$description~;~ ${companyRoles.joinToString { ":" }}"
+        return "$serviceName~;~$companyName~;~$industryName~;~$location~;~$description"
     }
 }
