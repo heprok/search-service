@@ -49,6 +49,10 @@ databaseChangeLog:
                   name: city_id
                   type: int
               - column:
+                  name: hidden
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
                   name: keywords_search
                   type: text
               - column:

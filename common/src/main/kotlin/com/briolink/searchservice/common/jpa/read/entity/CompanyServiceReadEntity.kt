@@ -20,7 +20,7 @@ class CompanyServiceReadEntity(
 
     @Type(type = "pg-uuid")
     @Column(name = "company_id", nullable = false)
-    var company_id: UUID
+    var companyId: UUID
 ) : BaseReadEntity() {
 
     @Column(name = "name", nullable = false, length = 255)
@@ -33,6 +33,9 @@ class CompanyServiceReadEntity(
     @Column(name = "number_of_uses", nullable = false)
     var numberOfUses: Int = 0
 
+    @Column(name = "price")
+    var price: Double? = null
+
     @Column(name = "country_id")
     var countryId: Int? = null
 
@@ -41,6 +44,9 @@ class CompanyServiceReadEntity(
 
     @Column(name = "city_id")
     var cityId: Int? = null
+
+    @Column(name = "hidden")
+    var hidden: Boolean = false
 
     @Column(name = "keywords_search")
     private lateinit var _keywordsSearch: String
@@ -66,6 +72,7 @@ class CompanyServiceReadEntity(
         var image: URL? = null,
         @JsonProperty
         var industryName: String? = null,
+        @JsonProperty
         var company: Company
     )
 

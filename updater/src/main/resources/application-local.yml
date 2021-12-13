@@ -1,20 +1,16 @@
+server:
+  port: 8105
+  error:
+    include-stacktrace: always
 logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type: TRACE
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-server:
-  port: 8100
-  error:
-    include-stacktrace: never
 spring:
   jpa:
     show-sql: true
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: https://auth.dev.briolink.net/auth/realms/briolink/protocol/openid-connect/certs
 app:
   app-endpoints:
+    companyservice: http://192.168.0.23:8090/
     locationservice: http://192.168.0.23:8070/
