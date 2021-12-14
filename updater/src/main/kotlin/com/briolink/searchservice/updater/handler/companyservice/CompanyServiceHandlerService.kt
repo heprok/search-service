@@ -1,7 +1,6 @@
 package com.briolink.searchservice.updater.handler.companyservice
 
 import com.briolink.searchservice.common.jpa.read.entity.CompanyReadEntity
-import com.briolink.searchservice.common.jpa.read.entity.CompanyServiceKeywordsSearch
 import com.briolink.searchservice.common.jpa.read.entity.CompanyServiceReadEntity
 import com.briolink.searchservice.common.jpa.read.repository.CompanyReadRepository
 import com.briolink.searchservice.common.jpa.read.repository.CompanyServiceReadRepository
@@ -38,12 +37,6 @@ class CompanyServiceHandlerService(
                         logo = companyReadEntity.data.logo
                     )
                 )
-                keywordsSearch = CompanyServiceKeywordsSearch(
-                    serviceName = name,
-                    companyName = data.company.name,
-                    industryName = data.industryName.orEmpty(),
-                    location = data.location?.toString().orEmpty(),
-                )
                 return companyServiceReadRepository.save(this)
             }
     }
@@ -55,13 +48,6 @@ class CompanyServiceHandlerService(
                 name = companyServiceEventData.name
                 data.description = companyServiceEventData.description
                 data.image = companyServiceEventData.logo
-                keywordsSearch = CompanyServiceKeywordsSearch(
-                    serviceName = name,
-                    companyName = data.company.name,
-                    industryName = data.industryName.orEmpty(),
-                    location = data.location?.toString().orEmpty(),
-                    description = data.description.orEmpty()
-                )
                 return companyServiceReadRepository.save(this)
             }
     }

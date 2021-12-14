@@ -9,6 +9,8 @@ import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
+import javax.persistence.PrePersist
+import javax.persistence.PreUpdate
 import javax.persistence.Table
 
 @Table(name = "company", schema = "read")
@@ -87,6 +89,19 @@ class CompanyReadEntity(
         @JsonProperty
         val type: CompanyRoleTypeEnum
     )
+
+    @PrePersist
+    @PreUpdate
+    fun genKeywordSearch() {
+        keywordsSearch = CompanyKeywordsSearch(
+            companyName = name,
+            industryName = data.industryName,
+            occupationName = data.occupationName,
+            location = data.location?.toString(),
+            description = data.description,
+            companyRoles = data.companyRoles.map { it.name }.toSet() as MutableSet<String>,
+        )
+    }
 }
 
 data class CompanyKeywordsSearch(val stringKeywords: String) {
@@ -119,12 +134,19 @@ data class CompanyKeywordsSearch(val stringKeywords: String) {
 
     constructor(
         companyName: String,
-        industryName: String = "",
-        occupationName: String = "",
-        location: String = "",
-        description: String = "",
+        industryName: String? = null,
+        occupationName: String? = null,
+        location: String? = null,
+        description: String? = null,
         companyRoles: MutableSet<String> = mutableSetOf()
-    ) : this("$companyName~;~$industryName~;~$occupationName~;~$location~;~$description~;~ ${companyRoles.joinToString { ":" }}")
+    ) : this(
+        "$companyName~;~" +
+            "${industryName.orEmpty()}~;~" +
+            "${occupationName.orEmpty()}~;~" +
+            "${location.orEmpty()}~;~" +
+            "${description.orEmpty()}~;~" +
+            companyRoles.joinToString { ":" }
+    )
 
     override fun toString(): String {
         return "$companyName~;~$industryName~;~$occupationName~;~$location~;~$description~;~ ${companyRoles.joinToString { ":" }}"

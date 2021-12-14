@@ -1,7 +1,6 @@
 package com.briolink.searchservice.updater.handler.company
 
 import com.briolink.searchservice.common.jpa.read.entity.CompanyIndustryReadEntity
-import com.briolink.searchservice.common.jpa.read.entity.CompanyKeywordsSearch
 import com.briolink.searchservice.common.jpa.read.entity.CompanyOccupationReadEntity
 import com.briolink.searchservice.common.jpa.read.entity.CompanyReadEntity
 import com.briolink.searchservice.common.jpa.read.repository.CompanyIndustryReadRepository
@@ -29,17 +28,19 @@ class CompanyHandlerService(
                 website = companyEventData.website,
                 slug = companyEventData.slug,
             )
-            keywordsSearch = CompanyKeywordsSearch(name, "")
             return companyReadRepository.save(this)
         }
     }
 
     fun updateCompany(companyEventData: CompanyEventData): CompanyReadEntity {
-        companyReadRepository.findById(companyEventData.id).orElseThrow { throw EntityNotFoundException("Company ${companyEventData.id} not found") } // ktlint-disable max-line-length
+        companyReadRepository.findById(companyEventData.id)
+            .orElseThrow { throw EntityNotFoundException("Company ${companyEventData.id} not found") } // ktlint-disable max-line-length
             .apply {
                 val locationInfo = companyEventData.locationId?.let { locationService.getLocation(it) }
-                val companyOccupationReadEntity = companyEventData.occupation?.let { compareAndCreateOccupation(occupationId, it.id, it.name) }
-                val companyIndustryReadEntity = companyEventData.industry?.let { compareAndCreateIndustry(industryId, it.id, it.name) }
+                val companyOccupationReadEntity =
+                    companyEventData.occupation?.let { compareAndCreateOccupation(occupationId, it.id, it.name) }
+                val companyIndustryReadEntity =
+                    companyEventData.industry?.let { compareAndCreateIndustry(industryId, it.id, it.name) }
                 name = companyEventData.name
                 industryId = companyIndustryReadEntity?.id
                 occupationId = companyOccupationReadEntity?.id
@@ -55,13 +56,6 @@ class CompanyHandlerService(
                     occupationName = companyOccupationReadEntity?.name
                     location = locationInfo
                 }
-                keywordsSearch = CompanyKeywordsSearch(
-                    companyName = name,
-                    industryName = data.industryName.orEmpty(),
-                    occupationName = data.occupationName.orEmpty(),
-                    location = data.location?.toString().orEmpty(),
-                    description = data.description.orEmpty(),
-                )
                 return companyReadRepository.save(this)
             }
     }

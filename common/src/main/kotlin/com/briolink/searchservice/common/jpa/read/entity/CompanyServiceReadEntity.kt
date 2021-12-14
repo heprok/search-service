@@ -8,6 +8,8 @@ import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
+import javax.persistence.PrePersist
+import javax.persistence.PreUpdate
 import javax.persistence.Table
 
 @Table(name = "company_service", schema = "read")
@@ -86,6 +88,18 @@ class CompanyServiceReadEntity(
         @JsonProperty
         val logo: URL? = null
     )
+
+    @PrePersist
+    @PreUpdate
+    fun genKeywordSearch() {
+        keywordsSearch = CompanyServiceKeywordsSearch(
+            serviceName = name,
+            companyName = data.company.name,
+            industryName = data.industryName,
+            location = data.location?.toString(),
+            description = data.description
+        )
+    }
 }
 
 data class CompanyServiceKeywordsSearch(val stringKeywords: String) {
@@ -116,10 +130,10 @@ data class CompanyServiceKeywordsSearch(val stringKeywords: String) {
     constructor(
         serviceName: String,
         companyName: String,
-        industryName: String = "",
-        location: String = "",
-        description: String = "",
-    ) : this("$serviceName~;~$companyName~;~$industryName~;~$location~;~$description")
+        industryName: String? = null,
+        location: String? = null,
+        description: String? = null,
+    ) : this("$serviceName~;~$companyName~;~${industryName.orEmpty()}~;~${location.orEmpty()}~;~${description.orEmpty()}")
 
     override fun toString(): String {
         return "$serviceName~;~$companyName~;~$industryName~;~$location~;~$description"
