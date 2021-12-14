@@ -8,6 +8,8 @@ import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
+import javax.persistence.PrePersist
+import javax.persistence.PreUpdate
 import javax.persistence.Table
 
 @Table(name = "User", schema = "read")
@@ -73,18 +75,20 @@ class UserReadEntity(
         @JsonProperty
         var currentPlaceOfWorkCompany: PlaceOfWork? = null,
         @JsonProperty
-        var previousPlaceOfWorkCompanies: ArrayList<PlaceOfWork>
+        var previousPlaceOfWorkCompanies: ArrayList<PlaceOfWork> = arrayListOf()
     )
 
     data class PlaceOfWork(
         @JsonProperty
         var companyId: UUID,
         @JsonProperty
+        var userJobPositionId: UUID,
+        @JsonProperty
         var companyName: String,
         @JsonProperty
         var slug: String,
         @JsonProperty
-        var logo: String
+        var logo: URL? = null
     )
 
     data class User(
@@ -95,15 +99,32 @@ class UserReadEntity(
         @JsonProperty
         var description: String? = null,
         @JsonProperty
-        var location: LocationInfoDto? = null,
+        var locationInfo: LocationInfoDto? = null,
+        @JsonProperty
+        var location: String? = null,
         @JsonProperty
         var slug: String,
         @JsonProperty
         var image: URL? = null
     )
+
+    @PrePersist
+    @PreUpdate
+    fun genKeywordSearch() {
+        keywordsSearch = UserKeywordsSearch(
+            fullName = fullName,
+            currentPlaceCompanyName = data.currentPlaceOfWorkCompany?.companyName,
+            industryName = data.industryName,
+            location = data.user.locationInfo?.toString(),
+            positionTitle = data.titlePosition,
+            description = data.user.description,
+        )
+        data.user.location = data.user.locationInfo?.toString()
+    }
 }
 
 data class UserKeywordsSearch(val stringKeywords: String) {
+    var fullName: String
     var currentPlaceCompanyName: String
     var industryName: String
     var location: String
@@ -113,30 +134,40 @@ data class UserKeywordsSearch(val stringKeywords: String) {
     init {
         val keywords = stringKeywords.split("~;~")
         if (keywords.isEmpty()) {
+            fullName = ""
             currentPlaceCompanyName = ""
             industryName = ""
             location = ""
             positionTitle = ""
             description = ""
         } else {
-            if (keywords.count() != 5) throw Exception("Wrong number of arguments in $stringKeywords must be 6 (currentPlaceCompanyName~;~industryName~;~location~;~positionTitle~;~description") // ktlint-disable max-line-length
-            currentPlaceCompanyName = keywords[0]
-            industryName = keywords[1]
-            location = keywords[2]
-            positionTitle = keywords[3]
-            description = keywords[4]
+            if (keywords.count() != 6) throw Exception("Wrong number of arguments in $stringKeywords must be 7 (fullName~;~currentPlaceCompanyName~;~industryName~;~location~;~positionTitle~;~description") // ktlint-disable max-line-length
+            fullName = keywords[0]
+            currentPlaceCompanyName = keywords[1]
+            industryName = keywords[2]
+            location = keywords[3]
+            positionTitle = keywords[4]
+            description = keywords[5]
         }
     }
 
     constructor(
-        currentPlaceCompanyName: String = "",
-        industryName: String = "",
-        location: String = "",
-        positionTitle: String = "",
-        description: String = "",
-    ) : this("$currentPlaceCompanyName~;~$industryName~;~$location~;~$positionTitle~;~$description")
+        fullName: String? = null,
+        currentPlaceCompanyName: String? = null,
+        industryName: String? = null,
+        location: String? = null,
+        positionTitle: String? = null,
+        description: String? = null,
+    ) : this(
+        fullName.orEmpty() +
+            "~;~" + currentPlaceCompanyName.orEmpty() +
+            "~;~" + industryName.orEmpty() +
+            "~;~" + location.orEmpty() +
+            "~;~" + positionTitle.orEmpty() +
+            "~;~" + description.orEmpty()
+    )
 
     override fun toString(): String {
-        return "$currentPlaceCompanyName~;~$industryName~;~$location~;~$positionTitle~;~$description"
+        return "$fullName~;~$currentPlaceCompanyName~;~$industryName~;~$location~;~$positionTitle~;~$description"
     }
 }
