@@ -22,7 +22,7 @@ databaseChangeLog:
                   name: industry_id
                   type: uuid
               - column:
-                  name: current_place_of_work_comapny_id
+                  name: current_place_of_work_company_id
                   type: uuid
               - column:
                   name: previous_place_of_work_company_ids
@@ -56,8 +56,8 @@ databaseChangeLog:
         - createIndex:
             columns:
               - column:
-                  name: current_place_of_work_comapny_id
-            indexName: idx_user_current_place_of_work_comapny_id
+                  name: current_place_of_work_company_id
+            indexName: idx_user_current_place_of_work_company_id
             schemaName: read
             tableName: user
         - createIndex:

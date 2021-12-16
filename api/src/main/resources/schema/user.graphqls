@@ -1,10 +1,32 @@
 type User {
+    id: ID!
     firstName: String!
     lastName: String!
     slug: String!
     image: Image
-    jobPosition: String
     location: String
-    placeOfWork: Company
+}
+
+type UserCard {
+    user: User!
+    currentPlaceWork: PlaceOfWork
     numberOfVerification: Int!
+}
+
+type PlaceOfWork {
+    company: Company!
+    jobPosition: String!
+}
+
+type UserCardList implements PaginatedList {
+    items: [UserCard!]!
+    totalItems: Int!
+}
+
+input UserCardSortParameter {
+    key: UserCardSortKeys!
+    direction: SortDirection!
+}
+enum UserCardSortKeys {
+    Name, NumberOfVerification
 }

@@ -56,7 +56,7 @@ interface UserReadRepository : JpaRepository<UserReadEntity, UUID> {
                     function('jsonb_get', c.data, currentPlaceOfWorkCompany, companyName),
                     :industryName, 
                     function('jsonb_get', c.data, user, location),
-                    function('jsonb_get', c.data, titlePosition),
+                    function('jsonb_get', c.data, currentPlaceOfWorkCompany, jobPositionTitle),
                     function('jsonb_get', c.data, user, description)
                 )
             WHERE c.currentPlaceOfWorkCompanyId = :companyId""",

@@ -9,10 +9,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 @EntityScan(
     basePackages = [
         "com.briolink.searchservice.common.jpa.read.entity",
+        "com.briolink.searchservice.common.jpa.write.entity",
     ],
 )
 @EnableJpaRepositories(
     basePackages = [
+        "com.briolink.searchservice.common.jpa.write.repository",
         "com.briolink.searchservice.common.jpa.read.repository",
     ],
 )

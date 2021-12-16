@@ -1,4 +1,4 @@
-package com.briolink.companyservice.api
+package com.briolink.searchservice.api
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

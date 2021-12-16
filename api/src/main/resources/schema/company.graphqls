@@ -1,9 +1,27 @@
 type Company {
+    id: ID!
     name: String!
     slug: String!
     logo: Image
     location: String
-    roles: [String]!
     description: String
+}
+
+type CompanyCard {
+    company: Company!
+    roles: [String]!
     numberOfVerification: Int!
+}
+
+type CompanyCardList implements PaginatedList {
+    items: [CompanyCard!]!
+    totalItems: Int!
+}
+
+input CompanyCardSortParameter {
+    key: CompanyCardSortKeys!
+    direction: SortDirection!
+}
+enum CompanyCardSortKeys {
+    Name, NumberOfVerification
 }

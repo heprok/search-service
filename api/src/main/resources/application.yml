@@ -16,8 +16,8 @@ spring:
       max-request-size: 2MB
   datasource:
     url: jdbc:postgresql://${env.DB_HOST:localhost}:${env.DB_PORT:5432}/${env.spring_profiles_active}_search
-    username: ${env.DB_USER:ok}
-    password: ${env.DB_PASSWORD:ok}
+    username: ${env.DB_USER:postgres}
+    password: ${env.DB_PASSWORD:postgres}
     hikari:
       idle-timeout: 20000
       minimum-idle: 1
@@ -27,7 +27,7 @@ spring:
       ddl-auto: none
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: com.briolink.searchservice.common.jpa.CustomPostgreDialect
         metadata_builder_contributor: com.briolink.searchservice.common.jpa.Functions
     generate-ddl: false
     show-sql: false

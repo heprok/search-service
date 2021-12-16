@@ -24,3 +24,9 @@ input RangeFloat {
 interface PaginatedList {
     totalItems: Int!
 }
+
+
+type IdNameItem {
+    id: ID!
+    name: String!
+}

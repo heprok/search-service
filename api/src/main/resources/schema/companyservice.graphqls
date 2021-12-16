@@ -1,8 +1,26 @@
 type CompanyService {
+    id: ID!
     name: String!
     slug: String!
     image: Image
     company: Company!
     price: Float
+}
+
+type CompanyServiceCard {
+    companyService: CompanyService!
     numberOfUses: Int!
+}
+
+type CompanyServiceCardList implements PaginatedList {
+    items: [CompanyServiceCard!]!
+    totalItems: Int!
+}
+
+input CompanyServiceCardSortParameter {
+    key: CompanyServiceCardSortKeys!
+    direction: SortDirection!
+}
+enum CompanyServiceCardSortKeys {
+    Price, NumberOfUses
 }

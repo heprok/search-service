@@ -1,11 +1,13 @@
 package com.briolink.searchservice.updater.handler.userjobposition
 
+import com.briolink.searchservice.common.jpa.read.entity.JobPositionTitleReadEntity
 import com.briolink.searchservice.common.jpa.read.entity.UserReadEntity
 import com.briolink.searchservice.common.jpa.read.repository.CompanyReadRepository
+import com.briolink.searchservice.common.jpa.read.repository.JobPositionTitleReadRepository
 import com.briolink.searchservice.common.jpa.read.repository.UserReadRepository
-import com.briolink.searchservice.common.service.LocationService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.UUID
 import javax.persistence.EntityNotFoundException
 
 @Transactional
@@ -13,7 +15,7 @@ import javax.persistence.EntityNotFoundException
 class UserJobPositionHandlerService(
     private val companyReadRepository: CompanyReadRepository,
     private val userReadRepository: UserReadRepository,
-    private val locationService: LocationService
+    private val jobPositionTitleReadRepository: JobPositionTitleReadRepository
 ) {
     fun create(userJobPositionEventData: UserJobPositionEventData) {
         val userReadEntity = userReadRepository.findById(userJobPositionEventData.userId)
@@ -27,9 +29,13 @@ class UserJobPositionHandlerService(
                 userJobPositionId = userJobPositionEventData.id,
                 companyName = companyReadEntity.name,
                 slug = companyReadEntity.data.slug,
-                logo = companyReadEntity.data.logo
+                logo = companyReadEntity.data.logo,
+                jobPositionTitle = userJobPositionEventData.title
             )
             if (userJobPositionEventData.isCurrent) {
+                industryId = companyReadEntity.industryId
+                data.industryName = companyReadEntity.data.industryName
+                positionTitleId = createJobPositionTittle(userJobPositionEventData.title).id
                 currentPlaceOfWorkCompanyId = companyReadEntity.id
                 data.currentPlaceOfWorkCompany = placeOfWork
             } else {
@@ -53,9 +59,13 @@ class UserJobPositionHandlerService(
                 userJobPositionId = userJobPositionEventData.id,
                 companyName = companyReadEntity.name,
                 slug = companyReadEntity.data.slug,
-                logo = companyReadEntity.data.logo
+                logo = companyReadEntity.data.logo,
+                jobPositionTitle = userJobPositionEventData.title
             )
             if (userJobPositionEventData.isCurrent) {
+                positionTitleId = createJobPositionTittle(userJobPositionEventData.title).id
+                industryId = companyReadEntity.industryId
+                data.industryName = companyReadEntity.data.industryName
                 if (data.currentPlaceOfWorkCompany == null) {
                     currentPlaceOfWorkCompanyId = companyReadEntity.id
                     data.currentPlaceOfWorkCompany = placeOfWork
@@ -86,6 +96,9 @@ class UserJobPositionHandlerService(
 
         userReadEntity.apply {
             if (userJobPositionDeleteEventData.isCurrent) {
+                industryId = null
+                data.industryName = null
+                positionTitleId = null
                 currentPlaceOfWorkCompanyId = null
                 data.currentPlaceOfWorkCompany = null
             } else {
@@ -96,5 +109,12 @@ class UserJobPositionHandlerService(
             }
             userReadRepository.save(this)
         }
+    }
+
+    private fun createJobPositionTittle(name: String): JobPositionTitleReadEntity {
+        val jobPositionTitle = jobPositionTitleReadRepository.findByName(name)
+        return if (jobPositionTitle.isEmpty)
+            jobPositionTitleReadRepository.save(JobPositionTitleReadEntity(UUID.randomUUID(), name))
+        else jobPositionTitle.get()
     }
 }

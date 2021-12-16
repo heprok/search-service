@@ -69,8 +69,6 @@ class UserReadEntity(
         @JsonProperty
         var user: User,
         @JsonProperty
-        var titlePosition: String? = null,
-        @JsonProperty
         var industryName: String? = null,
         @JsonProperty
         var currentPlaceOfWorkCompany: PlaceOfWork? = null,
@@ -84,6 +82,8 @@ class UserReadEntity(
         @JsonProperty
         var userJobPositionId: UUID,
         @JsonProperty
+        var jobPositionTitle: String,
+        @JsonProperty
         var companyName: String,
         @JsonProperty
         var slug: String,
@@ -92,6 +92,8 @@ class UserReadEntity(
     )
 
     data class User(
+        @JsonProperty
+        var id: UUID,
         @JsonProperty
         var firstName: String,
         @JsonProperty
@@ -116,7 +118,7 @@ class UserReadEntity(
             currentPlaceCompanyName = data.currentPlaceOfWorkCompany?.companyName,
             industryName = data.industryName,
             location = data.user.locationInfo?.toString(),
-            positionTitle = data.titlePosition,
+            positionTitle = data.currentPlaceOfWorkCompany?.jobPositionTitle,
             description = data.user.description,
         )
         data.user.location = data.user.locationInfo?.toString()

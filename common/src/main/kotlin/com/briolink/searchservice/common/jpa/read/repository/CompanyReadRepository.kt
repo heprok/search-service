@@ -10,8 +10,16 @@ import org.springframework.data.repository.query.Param
 import java.util.UUID
 
 interface CompanyReadRepository : JpaRepository<CompanyReadEntity, UUID> {
-    @Query("SELECT c.id, c.name FROM CompanyReadEntity c WHERE (:query is null or function('fts_partial', c.name, :query) = true)")
-    fun getAutoCompleteByName(@Param("query") query: String?, pageable: Pageable = Pageable.ofSize(10)): List<IdNameProjection>
+    @Query(
+        """SELECT CAST(c.id as varchar), c.name 
+           FROM read.company c 
+           WHERE (:query is null or to_tsvector('simple', c.name) @@ to_tsquery(quote_literal(quote_literal(:query)) || ':*') = true)""",
+        nativeQuery = true
+    )
+    fun getAutocompleteByName(
+        @Param("query") query: String?,
+        pageable: Pageable = Pageable.ofSize(10)
+    ): List<IdNameProjection>
 
     @Query("SELECT jsonb_get(c.data, location) FROM CompanyReadEntity c WHERE c.id = ?1")
     fun getLocationInfoByCompanyId(id: UUID): LocationInfoDto?

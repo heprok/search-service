@@ -20,3 +20,5 @@ databaseChangeLog:
                     unique: true
         - sql:
             sql: create index idx_job_position_title_name on read.job_position_title using gin (to_tsvector('simple', name))
+        - sql:
+            sql: create index idx_job_position_title_lower_name on read.job_position_title ((lower(name)))

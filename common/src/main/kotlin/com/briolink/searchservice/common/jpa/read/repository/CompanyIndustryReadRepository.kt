@@ -9,5 +9,5 @@ import java.util.UUID
 
 interface CompanyIndustryReadRepository : JpaRepository<CompanyIndustryReadEntity, UUID> {
     @Query("SELECT c FROM CompanyIndustryReadEntity c WHERE (:query is null or function('fts_partial', c.name, :query) = true)")
-    fun getAutoCompleteByName(@Param("query") query: String?, pageable: Pageable = Pageable.ofSize(10)): List<CompanyIndustryReadEntity>
+    fun getAutocompleteByName(@Param("query") query: String?, pageable: Pageable = Pageable.ofSize(10)): List<CompanyIndustryReadEntity>
 }

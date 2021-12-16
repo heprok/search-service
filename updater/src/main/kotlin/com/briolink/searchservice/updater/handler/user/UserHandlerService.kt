@@ -19,9 +19,10 @@ class UserHandlerService(
     fun create(userEventData: UserEventData): UserReadEntity {
         UserReadEntity(userEventData.id)
             .apply {
-                fullName = "${userEventData.firstName} ${userEventData.firstName}"
+                fullName = "${userEventData.firstName} ${userEventData.lastName}"
                 data = UserReadEntity.Data(
                     user = UserReadEntity.User(
+                        id = userEventData.id,
                         slug = userEventData.slug,
                         firstName = userEventData.firstName,
                         lastName = userEventData.lastName
@@ -36,7 +37,7 @@ class UserHandlerService(
             .orElseThrow { throw EntityNotFoundException("User with id ${userEventData.id} not found") }
             .apply {
                 val locationInfo = userEventData.locationId?.let { locationService.getLocation(it) }
-                fullName = "${userEventData.firstName} ${userEventData.firstName}"
+                fullName = "${userEventData.firstName} ${userEventData.lastName}"
                 countryId = locationInfo?.country?.id
                 stateId = locationInfo?.state?.id
                 cityId = locationInfo?.city?.id

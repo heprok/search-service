@@ -10,8 +10,14 @@ import org.springframework.data.repository.query.Param
 import java.util.UUID
 
 interface CompanyServiceReadRepository : JpaRepository<CompanyServiceReadEntity, UUID> {
-    @Query("SELECT array_agg(cs.id), cs.name FROM CompanyServiceReadEntity cs WHERE (:query is null or function('fts_partial', cs.name, :query) = true) GROUP BY cs.name") // ktlint-disable max-line-length
-    fun getAutoCompleteByName(
+    @Query(
+        """SELECT array_agg(CAST (cs.id as varchar)) as ids, cs.name 
+           FROM read.company_service cs 
+           WHERE (:query is null or to_tsvector('simple', cs.name) @@ to_tsquery(quote_literal(quote_literal(:query)) || ':*') = true) 
+           GROUP BY cs.name""",
+        nativeQuery = true
+    )
+    fun getAutocompleteByName(
         @Param("query") query: String?,
         pageable: Pageable = Pageable.ofSize(10)
     ): List<ArrayIdNameProjection>

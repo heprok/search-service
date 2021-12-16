@@ -99,7 +99,7 @@ class CompanyReadEntity(
             occupationName = data.occupationName,
             location = data.location?.toString(),
             description = data.description,
-            companyRoles = data.companyRoles.map { it.name }.toSet() as MutableSet<String>,
+            companyRoles = data.companyRoles.map { it.name }.toSet()
         )
     }
 }
@@ -110,7 +110,7 @@ data class CompanyKeywordsSearch(val stringKeywords: String) {
     var occupationName: String
     var location: String
     var description: String
-    var companyRoles: MutableSet<String>
+    var companyRoles: Set<String>
 
     init {
         val keywords = stringKeywords.split("~;~")
@@ -128,7 +128,7 @@ data class CompanyKeywordsSearch(val stringKeywords: String) {
             occupationName = keywords[2]
             location = keywords[3]
             description = keywords[4]
-            companyRoles = keywords[5].split(":").toSet() as MutableSet<String>
+            companyRoles = keywords[5].split(":").toSet()
         }
     }
 
@@ -138,7 +138,7 @@ data class CompanyKeywordsSearch(val stringKeywords: String) {
         occupationName: String? = null,
         location: String? = null,
         description: String? = null,
-        companyRoles: MutableSet<String> = mutableSetOf()
+        companyRoles: Set<String> = mutableSetOf()
     ) : this(
         "$companyName~;~" +
             "${industryName.orEmpty()}~;~" +

@@ -20,7 +20,7 @@ class ArrayAggFunc : SQLFunction {
     @Throws(QueryException::class)
     override fun render(type: Type?, args: List<*>, sessionFactoryImplementor: SessionFactoryImplementor?): String {
         val field = args.first()
-        return "array_agg($field}"
+        return "array_agg($field)"
     }
 
     @Throws(QueryException::class)
