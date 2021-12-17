@@ -36,7 +36,11 @@ class CompanyServiceQuery(
     ): CompanyServiceCardList {
         val filterDto = CompanyServiceFiltersDto(
             search = filter?.search,
-            serviceNameIds = filter?.serviceNameIds?.map { UUID.fromString(it) },
+            serviceIds = filter?.serviceNameIds?.let { listIds ->
+                mutableListOf<UUID>().apply {
+                    listIds.forEach { addAll(it.split(";").map { UUID.fromString(it) }) }
+                }
+            },
             companyIndustryIds = filter?.industryIds?.map { UUID.fromString(it) },
             companyIds = filter?.companyIds?.map { UUID.fromString(it) },
             priceMax = filter?.rangePrice?.max,
