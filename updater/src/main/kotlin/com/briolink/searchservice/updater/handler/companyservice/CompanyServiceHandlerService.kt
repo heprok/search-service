@@ -47,6 +47,7 @@ class CompanyServiceHandlerService(
             .apply {
                 name = companyServiceEventData.name
                 data.description = companyServiceEventData.description
+                price = companyServiceEventData.price
                 data.image = companyServiceEventData.logo
                 return companyServiceReadRepository.save(this)
             }

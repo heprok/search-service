@@ -30,3 +30,12 @@ input UserCardSortParameter {
 enum UserCardSortKeys {
     Name, NumberOfVerification
 }
+
+input UserCardFilterParameter {
+    search: String,
+    currentPlaceWorkCompanyIds: [ID!]
+    previousPlaceWorkCompanyIds: [ID!]
+    jobPositionTitleIds: [ID!]
+    industryIds: [ID!]
+    locationIds: [ID!]
+}

@@ -4,19 +4,19 @@ type Query {
     getLocations(query: String!): [Location]
 
     #    ===================Search from user===================
-    getUserCards(sort: UserCardSortParameter, limit: Int! = 10, offset: Int! = 0): UserCardList!
+    getUserCards(filter: UserCardFilterParameter, sort: UserCardSortParameter, limit: Int! = 10, offset: Int! = 0): UserCardList!
     #    ------------------User autocomplete------------------
     getUserPlaceWork(query: String): [IdNameItem]!
     getUserJobPositionTitle(query: String): [IdNameItem]!
 
     #    ===================Search from companyservice===================
-    getCompanyServiceCards(sort: CompanyServiceCardSortParameter, limit: Int! = 10, offset: Int! = 0): CompanyServiceCardList!
+    getCompanyServiceCards(filter: CompanyServiceCardFilterParameter, sort: CompanyServiceCardSortParameter, limit: Int! = 10, offset: Int! = 0): CompanyServiceCardList!
     #    ------------------CompanyService autocomplete------------------
     getCompanyServiceName(query: String): [IdNameItem]!
     getCompanyName(query: String): [IdNameItem]!
 
     #    ===================Search from company===================
-    getCompanyCards(sort: CompanyCardSortParameter, limit: Int! = 10, offset: Int! = 0): CompanyCardList!
+    getCompanyCards(filter: CompanyCardFilterParameter, sort: CompanyCardSortParameter, limit: Int! = 10, offset: Int! = 0): CompanyCardList!
     #    ------------------Company autocomplete------------------
     getCompanyRoles(query: String): [IdNameItem]!
     getCompanyOccupations(query: String): [IdNameItem]!

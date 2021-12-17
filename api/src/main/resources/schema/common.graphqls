@@ -17,8 +17,8 @@ enum SortDirection{
 }
 
 input RangeFloat {
-    start: Float
-    end: Float
+    min: Float
+    max: Float
 }
 
 interface PaginatedList {

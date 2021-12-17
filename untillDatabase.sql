@@ -8,4 +8,4 @@ delete read.user;
 delete read.company_service;
 delete read.company;
 
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+create EXTENSION IF NOT EXISTS "uuid-ossp";

@@ -24,3 +24,12 @@ input CompanyServiceCardSortParameter {
 enum CompanyServiceCardSortKeys {
     Price, NumberOfUses
 }
+
+input CompanyServiceCardFilterParameter {
+    search: String,
+    serviceNameIds: [ID!]
+    industryIds: [ID!]
+    companyIds: [ID!]
+    rangePrice: RangeFloat
+    locationIds: [ID!]
+}

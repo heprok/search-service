@@ -25,3 +25,11 @@ input CompanyCardSortParameter {
 enum CompanyCardSortKeys {
     Name, NumberOfVerification
 }
+
+input CompanyCardFilterParameter {
+    search: String,
+    companyRoleIds: [ID!]
+    industryIds: [ID!]
+    occupationIds: [ID!]
+    locationIds: [ID!]
+}
