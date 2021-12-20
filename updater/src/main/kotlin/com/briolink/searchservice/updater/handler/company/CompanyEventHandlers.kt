@@ -27,3 +27,12 @@ class CompanyUpdatedEventHandler(
         }
     }
 }
+
+@EventHandler("CompanyStatistic", "1.0")
+class CompanyStatisticEventHandler(
+    private val companyHandlerService: CompanyHandlerService
+) : IEventHandler<CompanyStatisticEvent> {
+    override fun handle(event: CompanyStatisticEvent) {
+        companyHandlerService.refreshStats(event.data)
+    }
+}

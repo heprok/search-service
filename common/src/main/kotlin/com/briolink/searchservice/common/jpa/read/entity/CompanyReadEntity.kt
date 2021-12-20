@@ -34,8 +34,8 @@ class CompanyReadEntity(
     var occupationId: UUID? = null
 
     @Type(type = "uuid-array")
-    @Column(name = "company_role_ids", nullable = false, columnDefinition = "uuid[]")
-    var companyRoleIds: MutableList<UUID> = mutableListOf()
+    @Column(name = "company_role_ids", columnDefinition = "uuid[]")
+    var companyRoleIds: List<UUID> = listOf()
 
     @Column(name = "number_of_verification", nullable = false)
     var numberOfVerification: Int = 0
@@ -72,7 +72,7 @@ class CompanyReadEntity(
         @JsonProperty
         var location: LocationInfoDto? = null,
         @JsonProperty
-        var companyRoles: MutableSet<CompanyRole> = mutableSetOf(),
+        var companyRoles: List<CompanyRole> = listOf(),
         @JsonProperty
         var logo: URL? = null,
         @JsonProperty
@@ -99,7 +99,7 @@ class CompanyReadEntity(
             occupationName = data.occupationName,
             location = data.location?.toString(),
             description = data.description,
-            companyRoles = data.companyRoles.map { it.name }.toSet()
+            companyRoles = data.companyRoles.map { it.name }
         )
     }
 }
@@ -110,7 +110,7 @@ data class CompanyKeywordsSearch(val stringKeywords: String) {
     var occupationName: String
     var location: String
     var description: String
-    var companyRoles: Set<String>
+    var companyRoles: List<String>
 
     init {
         val keywords = stringKeywords.split("~;~")
@@ -120,7 +120,7 @@ data class CompanyKeywordsSearch(val stringKeywords: String) {
             occupationName = ""
             location = ""
             description = ""
-            companyRoles = mutableSetOf()
+            companyRoles = listOf()
         } else {
             if (keywords.count() != 6) throw Exception("Wrong number of arguments in $stringKeywords must be 6 (companyName~;~industryName~;~occupationName~;~location~;~description~;~companyRoles") // ktlint-disable max-line-length
             companyName = keywords[0]
@@ -128,7 +128,7 @@ data class CompanyKeywordsSearch(val stringKeywords: String) {
             occupationName = keywords[2]
             location = keywords[3]
             description = keywords[4]
-            companyRoles = keywords[5].split(":").toSet()
+            companyRoles = keywords[5].split(":")
         }
     }
 
@@ -138,7 +138,7 @@ data class CompanyKeywordsSearch(val stringKeywords: String) {
         occupationName: String? = null,
         location: String? = null,
         description: String? = null,
-        companyRoles: Set<String> = mutableSetOf()
+        companyRoles: List<String> = listOf()
     ) : this(
         "$companyName~;~" +
             "${industryName.orEmpty()}~;~" +

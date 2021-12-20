@@ -1,5 +1,6 @@
 package com.briolink.searchservice.updater.handler.company
 
+import com.briolink.searchservice.common.jpa.enumeration.CompanyRoleTypeEnum
 import com.briolink.searchservice.common.jpa.enumeration.SearchTypeEnum
 import com.briolink.searchservice.common.jpa.read.entity.CompanyReadEntity
 import com.briolink.searchservice.common.jpa.read.repository.CompanyReadRepository
@@ -58,6 +59,24 @@ class CompanyHandlerService(
                     location = locationInfo
                 }
                 return companyReadRepository.save(this)
+            }
+    }
+
+    fun refreshStats(companyStatisticEventData: CompanyStatisticEventData) {
+        companyReadRepository.findById(companyStatisticEventData.companyId)
+            .orElseThrow { throw EntityNotFoundException("Company ${companyStatisticEventData.companyId} not found") }
+            .apply {
+                numberOfVerification = companyStatisticEventData.numberOfVerification
+                companyRoleIds = companyStatisticEventData.companyRoles.map { it.id }
+                data.companyRoles = companyStatisticEventData.companyRoles.map {
+                    searchService.createSearchItem(it.id, it.name, SearchTypeEnum.CompanyRoleName)
+                    CompanyReadEntity.CompanyRole(
+                        id = it.id,
+                        name = it.name,
+                        type = CompanyRoleTypeEnum.valueOf(it.type.name)
+                    )
+                }
+                companyReadRepository.save(this)
             }
     }
 }

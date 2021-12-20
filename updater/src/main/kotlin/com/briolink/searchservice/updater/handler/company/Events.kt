@@ -41,5 +41,32 @@ data class CompanyOccupationData(
     val name: String
 )
 
+data class CompanyStatisticEventData(
+    @JsonProperty
+    val companyId: UUID,
+    @JsonProperty
+    val numberOfVerification: Int,
+    @JsonProperty
+    val companyRoles: ArrayList<ConnectionCompanyRoleData>
+)
+
+data class ConnectionCompanyRoleData(
+    @JsonProperty
+    val id: UUID,
+    @JsonProperty
+    val name: String,
+    @JsonProperty
+    val type: ConnectionCompanyRoleType
+)
+
+enum class ConnectionCompanyRoleType(val value: Int) {
+    @JsonProperty("0")
+    Buyer(0),
+
+    @JsonProperty("1")
+    Seller(1)
+}
+
 data class CompanyCreatedEvent(override val data: CompanyEventData) : Event<CompanyEventData>("1.0")
 data class CompanyUpdatedEvent(override val data: CompanyEventData) : Event<CompanyEventData>("1.0")
+data class CompanyStatisticEvent(override val data: CompanyStatisticEventData) : Event<CompanyStatisticEventData>("1.0")
