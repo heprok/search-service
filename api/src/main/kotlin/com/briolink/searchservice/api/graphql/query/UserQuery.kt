@@ -33,7 +33,7 @@ class UserQuery(
         @InputArgument offset: Int,
     ): UserCardList {
         val filterDto = UserFiltersDto(
-            search = filter?.search,
+            searchText = filter?.searchText,
             currentPlaceWorkCompanyIds = filter?.currentPlaceWorkCompanyIds?.map { UUID.fromString(it) },
             previousPlaceWorkCompanyIds = filter?.previousPlaceWorkCompanyIds?.map { UUID.fromString(it) },
             jobPositionTitleIds = filter?.jobPositionTitleIds?.map { UUID.fromString(it) },
@@ -63,7 +63,7 @@ class UserQuery(
         @InputArgument query: String?
     ): List<IdNameItem> =
         autocompleteService.getCompanyName(query).map {
-            IdNameItem(id = it.id, name = it.name)
+            IdNameItem(id = it.objectIds.joinToString(";"), name = it.name)
         }
 
     @DgsQuery
@@ -72,6 +72,6 @@ class UserQuery(
         @InputArgument query: String?
     ): List<IdNameItem> =
         autocompleteService.getJobPositionTitle(query).map {
-            IdNameItem(id = it.id.toString(), name = it.name)
+            IdNameItem(id = it.objectIds.joinToString(";"), name = it.name)
         }
 }

@@ -27,6 +27,9 @@ databaseChangeLog:
                   name: industry_id
                   type: uuid
               - column:
+                  name: occupation_id
+                  type: uuid
+              - column:
                   name: number_of_uses
                   type: int
                   defaultValueNumeric: 0
@@ -69,8 +72,8 @@ databaseChangeLog:
             tableName: company_service
         - sql:
             sql: create index idx_company_service_keywords_search on read.company_service using gin (to_tsvector('simple', keywords_search))
-        - sql:
-            sql: create index idx_company_service_name on read.company_service using gin (to_tsvector('simple', name))
+        #        - sql:
+        #            sql: create index idx_company_service_name on read.company_service using gin (to_tsvector('simple', name))
         - createIndex:
             columns:
               - column:
@@ -90,6 +93,13 @@ databaseChangeLog:
               - column:
                   name: industry_id
             indexName: idx_company_service_industry_id
+            schemaName: read
+            tableName: company_service
+        - createIndex:
+            columns:
+              - column:
+                  name: occupation_id
+            indexName: idx_company_service_occupation_id
             schemaName: read
             tableName: company_service
         - createIndex:

@@ -33,11 +33,11 @@ class CompanyQuery(
         @InputArgument offset: Int,
     ): CompanyCardList {
         val filterDto = CompanyFiltersDto(
-            search = filter?.search,
+            searchText = filter?.searchText,
             companyRoleIds = filter?.companyRoleIds?.map { UUID.fromString(it) },
             companyIndustryIds = filter?.industryIds?.map { UUID.fromString(it) },
             companyOccupationIds = filter?.occupationIds?.map { UUID.fromString(it) },
-            locationIds = filter?.locationIds?.map { LocationId.fromString(it) }
+            locationIds = filter?.locationIds?.map { LocationId.fromString(it) },
         )
         val pageListCompanyCard = companyService.getList(
             filters = filterDto,
@@ -62,7 +62,7 @@ class CompanyQuery(
         @InputArgument query: String?
     ): List<IdNameItem> =
         autocompleteService.getCompanyRole(query?.ifBlank { null }).map {
-            IdNameItem(id = it.id.toString(), name = it.name)
+            IdNameItem(id = it.objectIds.joinToString(";"), name = it.name)
         }
 
     @DgsQuery
@@ -71,6 +71,6 @@ class CompanyQuery(
         @InputArgument query: String?
     ): List<IdNameItem> =
         autocompleteService.getCompanyOccupation(query).map {
-            IdNameItem(id = it.id.toString(), name = it.name)
+            IdNameItem(id = it.objectIds.joinToString(";"), name = it.name)
         }
 }

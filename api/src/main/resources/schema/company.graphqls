@@ -27,7 +27,7 @@ enum CompanyCardSortKeys {
 }
 
 input CompanyCardFilterParameter {
-    search: String,
+    searchText: String
     companyRoleIds: [ID!]
     industryIds: [ID!]
     occupationIds: [ID!]

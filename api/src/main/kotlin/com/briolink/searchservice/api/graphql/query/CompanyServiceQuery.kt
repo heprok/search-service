@@ -3,7 +3,6 @@ package com.briolink.searchservice.api.graphql.query
 import com.briolink.searchservice.api.dto.SortDirectionEnum
 import com.briolink.searchservice.api.graphql.fromEntity
 import com.briolink.searchservice.api.service.AutocompleteService
-import com.briolink.searchservice.api.service.company.CompanyService
 import com.briolink.searchservice.api.service.companyservice.CompanyServiceService
 import com.briolink.searchservice.api.service.companyservice.dto.CompanyServiceFiltersDto
 import com.briolink.searchservice.api.service.companyservice.dto.CompanyServiceSortDto
@@ -23,7 +22,6 @@ import java.util.UUID
 @DgsComponent
 class CompanyServiceQuery(
     private val companyServiceService: CompanyServiceService,
-    private val companyService: CompanyService,
     private val autocompleteService: AutocompleteService
 ) {
     @DgsQuery
@@ -35,7 +33,7 @@ class CompanyServiceQuery(
         @InputArgument offset: Int,
     ): CompanyServiceCardList {
         val filterDto = CompanyServiceFiltersDto(
-            search = filter?.search,
+            searchText = filter?.searchText,
             serviceIds = filter?.serviceNameIds?.let { listIds ->
                 mutableListOf<UUID>().apply {
                     listIds.forEach { addAll(it.split(";").map { UUID.fromString(it) }) }
@@ -69,7 +67,7 @@ class CompanyServiceQuery(
     fun getCompanyName(
         @InputArgument query: String?
     ): List<IdNameItem> =
-        autocompleteService.getCompanyName(query).map { IdNameItem(it.id, it.name) }
+        autocompleteService.getCompanyName(query).map { IdNameItem(it.objectIds.joinToString(";"), it.name) }
 
     @DgsQuery
     @PreAuthorize("isAuthenticated()")
@@ -77,6 +75,6 @@ class CompanyServiceQuery(
         @InputArgument query: String?
     ): List<IdNameItem> =
         autocompleteService.getCompanyServiceName(query).map {
-            IdNameItem(it.ids.joinToString(";"), it.name)
+            IdNameItem(it.objectIds.joinToString(";"), it.name)
         }
 }

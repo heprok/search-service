@@ -2,6 +2,7 @@ type Query {
     #    ===================Common autocomplete===================
     getIndustries(query: String): [IdNameItem]!
     getLocations(query: String!): [Location]
+    getSearch(query: String, searchTypes: SearchTypesParameter) : [String]!
 
     #    ===================Search from user===================
     getUserCards(filter: UserCardFilterParameter, sort: UserCardSortParameter, limit: Int! = 10, offset: Int! = 0): UserCardList!

@@ -32,6 +32,10 @@ class CompanyServiceReadEntity(
     @Column(name = "industry_id")
     var industryId: UUID? = null
 
+    @Type(type = "pg-uuid")
+    @Column(name = "occupation_id")
+    var occupationId: UUID? = null
+
     @Column(name = "number_of_uses", nullable = false)
     var numberOfUses: Int = 0
 
@@ -75,6 +79,8 @@ class CompanyServiceReadEntity(
         @JsonProperty
         var industryName: String? = null,
         @JsonProperty
+        var occupationName: String? = null,
+        @JsonProperty
         var company: Company
     )
 
@@ -95,6 +101,7 @@ class CompanyServiceReadEntity(
         keywordsSearch = CompanyServiceKeywordsSearch(
             serviceName = name,
             companyName = data.company.name,
+            occupationName = data.occupationName,
             industryName = data.industryName,
             location = data.location?.toString(),
             description = data.description
@@ -105,6 +112,7 @@ class CompanyServiceReadEntity(
 data class CompanyServiceKeywordsSearch(val stringKeywords: String) {
     var serviceName: String
     var companyName: String
+    var occupationName: String
     var industryName: String
     var location: String
     var description: String
@@ -114,16 +122,18 @@ data class CompanyServiceKeywordsSearch(val stringKeywords: String) {
         if (keywords.isEmpty()) {
             serviceName = ""
             companyName = ""
+            occupationName = ""
             industryName = ""
             location = ""
             description = ""
         } else {
-            if (keywords.count() != 5) throw Exception("Wrong number of arguments in $stringKeywords must be 5 (serviceName~;~companyMame~;~industryName~;~location~;~description)") // ktlint-disable max-line-length
+            if (keywords.count() != 6) throw Exception("Wrong number of arguments in $stringKeywords must be 5 (serviceName~;~companyName~;~occupationName~;~industryName~;~location~;~description)") // ktlint-disable max-line-length
             serviceName = keywords[0]
             companyName = keywords[1]
-            industryName = keywords[2]
-            location = keywords[3]
-            description = keywords[4]
+            occupationName = keywords[2]
+            industryName = keywords[3]
+            location = keywords[4]
+            description = keywords[5]
         }
     }
 
@@ -131,11 +141,12 @@ data class CompanyServiceKeywordsSearch(val stringKeywords: String) {
         serviceName: String,
         companyName: String,
         industryName: String? = null,
+        occupationName: String? = null,
         location: String? = null,
         description: String? = null,
-    ) : this("$serviceName~;~$companyName~;~${industryName.orEmpty()}~;~${location.orEmpty()}~;~${description.orEmpty()}")
+    ) : this("$serviceName~;~$companyName~;~${occupationName.orEmpty()}~;~${industryName.orEmpty()}~;~${location.orEmpty()}~;~${description.orEmpty()}") // ktlint-disable max-line-length
 
     override fun toString(): String {
-        return "$serviceName~;~$companyName~;~$industryName~;~$location~;~$description"
+        return "$serviceName~;~$companyName~;~$occupationName~;~$industryName~;~$industryName~;~$location~;~$description"
     }
 }

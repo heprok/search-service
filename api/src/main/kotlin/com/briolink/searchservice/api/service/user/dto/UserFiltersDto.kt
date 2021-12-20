@@ -3,8 +3,8 @@ package com.briolink.searchservice.api.service.user.dto
 import com.briolink.searchservice.common.dto.location.LocationId
 import java.util.UUID
 
-data class UserFiltersDto(
-    val search: String? = null,
+class UserFiltersDto(
+    val searchText: String? = null,
     val currentPlaceWorkCompanyIds: List<UUID>? = null,
     val previousPlaceWorkCompanyIds: List<UUID>? = null,
     val jobPositionTitleIds: List<UUID>? = null,

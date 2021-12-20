@@ -45,6 +45,8 @@ class UserService(
         with(filters) {
             if (!currentPlaceWorkCompanyIds.isNullOrEmpty()) cb.where("currentPlaceOfWorkCompanyId")
                 .`in`(currentPlaceWorkCompanyIds)
+            if (!searchText.isNullOrBlank()) cb.whereExpression("function('fts_partial', _keywordsSearch, :searchText) = true")
+                .setParameter("searchText", searchText)
             if (!previousPlaceWorkCompanyIds.isNullOrEmpty()) {
                 cb
                     .whereExpression("array_contains(previousPlaceOfWorkCompanyIds, :companyRolesIds) = true")

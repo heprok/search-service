@@ -1,0 +1,13 @@
+enum SearchType {
+    CompanyIndustryName
+    CompanyOccupationName
+    CompanyRoleName
+    CompanyServiceName
+    CompanyName
+    JobPositionTitleName
+    FullNameUser
+}
+
+input SearchTypesParameter {
+    searchTypes: [SearchType!]!
+}

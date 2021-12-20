@@ -4,7 +4,7 @@ import com.briolink.searchservice.common.dto.location.LocationId
 import java.util.UUID
 
 data class CompanyServiceFiltersDto(
-    val search: String? = null,
+    val searchText: String? = null,
     val serviceIds: List<UUID>? = null,
     val companyIndustryIds: List<UUID>? = null,
     val companyIds: List<UUID>? = null,

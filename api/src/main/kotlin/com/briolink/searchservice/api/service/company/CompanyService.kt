@@ -53,7 +53,8 @@ class CompanyService(
                         TypedParameterValue(UUIDArrayType.INSTANCE, companyRoleIds.toTypedArray())
                     )
             }
-
+            if (!searchText.isNullOrBlank()) cb.whereExpression("function('fts_partial', _keywordsSearch, :searchText) = true")
+                .setParameter("searchText", searchText)
             if (!companyIndustryIds.isNullOrEmpty()) cb.where("industryId").`in`(companyIndustryIds)
             if (!companyOccupationIds.isNullOrEmpty()) cb.where("occupationId").`in`(companyOccupationIds)
             if (!locationIds.isNullOrEmpty()) {

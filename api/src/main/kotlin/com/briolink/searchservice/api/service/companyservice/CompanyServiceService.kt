@@ -41,6 +41,8 @@ class CompanyServiceService(
         filters: CompanyServiceFiltersDto
     ): T where T : WhereBuilder<T>, T : ParameterHolder<T> {
         with(filters) {
+            if (!searchText.isNullOrBlank()) cb.whereExpression("function('fts_partial', _keywordsSearch, :searchText) = true")
+                .setParameter("searchText", searchText)
 
             if (!companyIndustryIds.isNullOrEmpty()) cb.where("industryId").`in`(companyIndustryIds)
             if (!companyIds.isNullOrEmpty()) cb.where("companyId").`in`(companyIds)

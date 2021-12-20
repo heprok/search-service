@@ -1,30 +1,36 @@
 package com.briolink.searchservice.common.jpa.read.entity
 
-import com.briolink.searchservice.common.jpa.enumeration.CompanyRoleTypeEnum
+import com.briolink.searchservice.common.jpa.enumeration.SearchTypeEnum
 import org.hibernate.annotations.Type
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.Table
 
-@Table(name = "company_role", schema = "read")
+@Table(name = "search", schema = "read")
 @Entity
-class CompanyRoleReadEntity(
+class SearchReadEntity(
     @Id
+    @GeneratedValue
     @Type(type = "pg-uuid")
     @Column(name = "id", nullable = false)
-    val id: UUID,
+    val id: UUID? = null,
 
     @Column(name = "name", nullable = false, length = 255)
     var name: String,
-
 ) : BaseReadEntity() {
-    @Column(name = "type")
+
+    @Type(type = "uuid-array")
+    @Column(name = "object_ids", nullable = false, columnDefinition = "uuid[]")
+    var objectIds: MutableList<UUID> = mutableListOf()
+
+    @Column(name = "type", nullable = false)
     private var _type: Int = 0
 
-    var type: CompanyRoleTypeEnum
-        get() = CompanyRoleTypeEnum.fromInt(_type)
+    var type: SearchTypeEnum
+        get() = SearchTypeEnum.fromInt(_type)
         set(value) {
             _type = value.value
         }

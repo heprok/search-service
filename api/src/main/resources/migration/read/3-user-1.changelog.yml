@@ -28,7 +28,7 @@ databaseChangeLog:
                   name: previous_place_of_work_company_ids
                   type: uuid[]
               - column:
-                  name: position_title_id
+                  name: job_position_id
                   type: uuid
               - column:
                   name: number_of_verification
@@ -86,8 +86,8 @@ databaseChangeLog:
         - createIndex:
             columns:
               - column:
-                  name: position_title_id
-            indexName: idx_user_position_title_id
+                  name: job_position_id
+            indexName: idx_user_job_position__id
             schemaName: read
             tableName: user
         - createIndex:

@@ -1,8 +1,6 @@
 package com.briolink.searchservice.common.jpa.read.repository
 
-import com.briolink.searchservice.common.jpa.projection.ArrayIdNameProjection
 import com.briolink.searchservice.common.jpa.read.entity.CompanyServiceReadEntity
-import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
@@ -10,18 +8,6 @@ import org.springframework.data.repository.query.Param
 import java.util.UUID
 
 interface CompanyServiceReadRepository : JpaRepository<CompanyServiceReadEntity, UUID> {
-    @Query(
-        """SELECT array_agg(CAST (cs.id as varchar)) as ids, cs.name 
-           FROM read.company_service cs 
-           WHERE (:query is null or to_tsvector('simple', cs.name) @@ to_tsquery(quote_literal(quote_literal(:query)) || ':*') = true) 
-           GROUP BY cs.name""",
-        nativeQuery = true
-    )
-    fun getAutocompleteByName(
-        @Param("query") query: String?,
-        pageable: Pageable = Pageable.ofSize(10)
-    ): List<ArrayIdNameProjection>
-
     @Modifying
     @Query(
         """UPDATE CompanyServiceReadEntity c
@@ -29,14 +15,16 @@ interface CompanyServiceReadRepository : JpaRepository<CompanyServiceReadEntity,
                c.stateId = :stateId, 
                c.cityId = :cityId, 
                c.industryId = :industryId,
+               c.occupationId = :occupationId,
                c.data = function('jsonb_sets', c.data,
                     '{company,name}', :name, text,
                     '{company,slug}', :slug, text,
                     '{company,logo}', :logo, text,
                     '{industryName}', :industryName, text,
+                    '{occupationName}', :occupationName, text,
                     '{location}', :locationJson, jsonb
            ), 
-                c._keywordsSearch = concat_ws('~;~', c.name, :name, :industryName, :location, jsonb_get(c.data, description))
+                c._keywordsSearch = concat_ws('~;~', c.name, :name, :occupationName, :industryName, :location, jsonb_get(c.data, description))
             WHERE c.companyId = :companyId""",
     )
     fun updateCompany(
@@ -50,7 +38,9 @@ interface CompanyServiceReadRepository : JpaRepository<CompanyServiceReadEntity,
         @Param("locationJson") locationJson: String,
         @Param("location") location: String?,
         @Param("industryId") industryId: UUID?,
-        @Param("industryName") industryName: String?
+        @Param("industryName") industryName: String?,
+        @Param("occupationId") occupationId: UUID?,
+        @Param("occupationName") occupationName: String?
     )
 
     @Modifying

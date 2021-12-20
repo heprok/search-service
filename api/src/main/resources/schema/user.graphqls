@@ -32,7 +32,7 @@ enum UserCardSortKeys {
 }
 
 input UserCardFilterParameter {
-    search: String,
+    searchText: String
     currentPlaceWorkCompanyIds: [ID!]
     previousPlaceWorkCompanyIds: [ID!]
     jobPositionTitleIds: [ID!]

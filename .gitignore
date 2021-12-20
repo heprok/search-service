@@ -30,3 +30,4 @@ out/
 !**/src/test/**/out/
 /untilDatabase.sql
 /.run/
+/untillDatabase.sql

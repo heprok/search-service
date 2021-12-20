@@ -1,10 +1,11 @@
 package com.briolink.searchservice.updater.handler.user
 
+import com.briolink.searchservice.common.jpa.enumeration.SearchTypeEnum
 import com.briolink.searchservice.common.jpa.read.entity.CompanyReadEntity
 import com.briolink.searchservice.common.jpa.read.entity.UserReadEntity
-import com.briolink.searchservice.common.jpa.read.repository.CompanyReadRepository
 import com.briolink.searchservice.common.jpa.read.repository.UserReadRepository
 import com.briolink.searchservice.common.service.LocationService
+import com.briolink.searchservice.updater.service.SearchService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.EntityNotFoundException
@@ -12,8 +13,8 @@ import javax.persistence.EntityNotFoundException
 @Transactional
 @Service
 class UserHandlerService(
-    private val companyReadRepository: CompanyReadRepository,
     private val userReadRepository: UserReadRepository,
+    private val searchService: SearchService,
     private val locationService: LocationService
 ) {
     fun create(userEventData: UserEventData): UserReadEntity {
@@ -28,6 +29,7 @@ class UserHandlerService(
                         lastName = userEventData.lastName
                     )
                 )
+                searchService.createSearchItem(id, fullName, SearchTypeEnum.FullNameUser)
                 return userReadRepository.save(this)
             }
     }
@@ -47,6 +49,7 @@ class UserHandlerService(
                     user.image = userEventData.image
                     user.locationInfo = locationInfo
                 }
+                searchService.createSearchItem(id, fullName, SearchTypeEnum.FullNameUser)
                 return userReadRepository.save(this)
             }
     }
