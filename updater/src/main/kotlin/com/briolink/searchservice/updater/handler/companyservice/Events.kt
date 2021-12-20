@@ -9,6 +9,8 @@ data class CompanyServiceCreatedEvent(override val data: CompanyServiceEventData
 data class CompanyServiceUpdatedEvent(override val data: CompanyServiceEventData) : Event<CompanyServiceEventData>("1.0")
 data class CompanyServiceDeletedEvent(override val data: CompanyServiceDeletedData) : Event<CompanyServiceDeletedData>("1.0")
 data class CompanyServiceHideEvent(override val data: CompanyServiceHideData) : Event<CompanyServiceHideData>("1.0")
+data class CompanyServiceStatisticEvent(override val data: CompanyServiceStatisticEventData) :
+    Event<CompanyServiceStatisticEventData>("1.0")
 
 data class CompanyServiceEventData(
     @JsonProperty
@@ -41,4 +43,11 @@ data class CompanyServiceHideData(
     val companyId: UUID,
     @JsonProperty
     val hidden: Boolean,
+)
+
+data class CompanyServiceStatisticEventData(
+    @JsonProperty
+    val serviceId: UUID,
+    @JsonProperty
+    val numberOfUses: Int
 )

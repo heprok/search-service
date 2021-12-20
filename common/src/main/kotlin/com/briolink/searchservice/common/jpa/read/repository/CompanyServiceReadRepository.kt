@@ -50,4 +50,8 @@ interface CompanyServiceReadRepository : JpaRepository<CompanyServiceReadEntity,
     @Modifying
     @Query("UPDATE CompanyServiceReadEntity c SET c.hidden = ?2 WHERE c.id = ?1")
     fun setHidden(id: UUID, hidden: Boolean)
+
+    @Modifying
+    @Query("UPDATE CompanyServiceReadEntity c SET c.numberOfUses = ?2 WHERE c.id = ?1")
+    fun updateNumberOfUses(id: UUID, numberOfUses: Int)
 }

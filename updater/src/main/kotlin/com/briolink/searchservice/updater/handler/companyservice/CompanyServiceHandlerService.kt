@@ -96,4 +96,11 @@ class CompanyServiceHandlerService(
     fun setHidden(companyServiceId: UUID, hidden: Boolean) {
         companyServiceReadRepository.setHidden(id = companyServiceId, hidden = hidden)
     }
+
+    fun refreshStats(companyServiceStatisticEventData: CompanyServiceStatisticEventData) {
+        companyServiceReadRepository.updateNumberOfUses(
+            companyServiceStatisticEventData.serviceId,
+            companyServiceStatisticEventData.numberOfUses
+        )
+    }
 }

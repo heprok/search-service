@@ -38,3 +38,12 @@ class CompanyServiceHideEventHandler(
         companyServiceHandlerService.setHidden(event.data.id, event.data.hidden)
     }
 }
+
+@EventHandler("CompanyServiceStatisticEvent", "1.0")
+class CompanyServiceStatisticEventHandler(
+    private val companyServiceHandlerService: CompanyServiceHandlerService
+) : IEventHandler<CompanyServiceStatisticEvent> {
+    override fun handle(event: CompanyServiceStatisticEvent) {
+        companyServiceHandlerService.refreshStats(event.data)
+    }
+}

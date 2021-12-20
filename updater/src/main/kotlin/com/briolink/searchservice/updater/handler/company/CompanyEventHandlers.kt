@@ -28,7 +28,7 @@ class CompanyUpdatedEventHandler(
     }
 }
 
-@EventHandler("CompanyStatistic", "1.0")
+@EventHandler("CompanyStatisticEvent", "1.0")
 class CompanyStatisticEventHandler(
     private val companyHandlerService: CompanyHandlerService
 ) : IEventHandler<CompanyStatisticEvent> {
