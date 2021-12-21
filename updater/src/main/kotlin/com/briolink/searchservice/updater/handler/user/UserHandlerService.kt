@@ -70,4 +70,11 @@ class UserHandlerService(
             industryName = company.data.industryName
         )
     }
+
+    fun refreshStats(userStatisticEventData: UserStatisticEventData) {
+        userReadRepository.updateNumberOfVerification(
+            userStatisticEventData.userId,
+            userStatisticEventData.numberOfVerification
+        )
+    }
 }

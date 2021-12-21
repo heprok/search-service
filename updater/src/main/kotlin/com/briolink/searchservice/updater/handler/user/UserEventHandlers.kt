@@ -20,3 +20,12 @@ class UserEventUpdatedHandler(
         userHandlerService.update(event.data)
     }
 }
+
+@EventHandler("UserStatisticEvent", "1.0")
+class UserStatisticEventHandler(
+    private val userHandlerService: UserHandlerService
+) : IEventHandler<UserStatisticEvent> {
+    override fun handle(event: UserStatisticEvent) {
+        userHandlerService.refreshStats(event.data)
+    }
+}

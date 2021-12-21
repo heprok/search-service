@@ -69,4 +69,8 @@ interface UserReadRepository : JpaRepository<UserReadEntity, UUID> {
         industryId: UUID?,
         industryName: String?
     )
+
+    @Modifying
+    @Query("UPDATE UserReadEntity c SET c.numberOfVerification = ?2 WHERE c.id = ?1")
+    fun updateNumberOfVerification(id: UUID, numberOfVerification: Int)
 }
