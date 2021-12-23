@@ -19,6 +19,7 @@ fun User.Companion.fromEntity(entity: UserReadEntity.User) = User(
     lastName = entity.lastName,
     slug = entity.slug,
     image = entity.image?.let { Image(it) },
+    description = entity.description,
     location = entity.locationInfo?.toString()
 )
 
@@ -51,6 +52,7 @@ fun Company.Companion.fromEntity(entity: CompanyReadEntity) = Company(
     id = entity.id.toString(),
     name = entity.name,
     slug = entity.data.slug,
+    occupation = entity.data.occupationName,
     logo = entity.data.logo?.let { Image(it) },
     location = entity.data.location?.toString(),
     description = entity.data.description

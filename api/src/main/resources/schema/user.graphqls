@@ -5,6 +5,7 @@ type User {
     slug: String!
     image: Image
     location: String
+    description: String
 }
 
 type UserCard {

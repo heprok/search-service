@@ -4,6 +4,7 @@ type Company {
     slug: String!
     logo: Image
     location: String
+    occupation: String
     description: String
 }
 
