@@ -8,7 +8,6 @@ import com.briolink.searchservice.common.service.LocationService
 import com.briolink.searchservice.updater.service.SearchService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import javax.persistence.EntityNotFoundException
 
 @Transactional
 @Service
@@ -17,10 +16,9 @@ class UserHandlerService(
     private val searchService: SearchService,
     private val locationService: LocationService
 ) {
-    fun create(userEventData: UserEventData): UserReadEntity {
-        UserReadEntity(userEventData.id)
-            .apply {
-                fullName = "${userEventData.firstName} ${userEventData.lastName}"
+    fun createOrUpdate(userEventData: UserEventData): UserReadEntity {
+        userReadRepository.findById(userEventData.id).orElse(
+            UserReadEntity(userEventData.id).apply {
                 data = UserReadEntity.Data(
                     user = UserReadEntity.User(
                         id = userEventData.id,
@@ -29,29 +27,22 @@ class UserHandlerService(
                         lastName = userEventData.lastName
                     )
                 )
-                searchService.createSearchItem(id, fullName, SearchTypeEnum.FullNameUser)
-                return userReadRepository.save(this)
             }
-    }
-
-    fun update(userEventData: UserEventData): UserReadEntity {
-        userReadRepository.findById(userEventData.id)
-            .orElseThrow { throw EntityNotFoundException("User with id ${userEventData.id} not found") }
-            .apply {
-                val locationInfo = userEventData.locationId?.let { locationService.getLocation(it) }
-                fullName = "${userEventData.firstName} ${userEventData.lastName}"
-                countryId = locationInfo?.country?.id
-                stateId = locationInfo?.state?.id
-                cityId = locationInfo?.city?.id
-                data.apply {
-                    user.firstName = userEventData.firstName
-                    user.description = userEventData.description
-                    user.image = userEventData.image
-                    user.locationInfo = locationInfo
-                }
-                searchService.createSearchItem(id, fullName, SearchTypeEnum.FullNameUser)
-                return userReadRepository.save(this)
+        ).apply {
+            val locationInfo = userEventData.locationId?.let { locationService.getLocation(it) }
+            fullName = "${userEventData.firstName} ${userEventData.lastName}"
+            countryId = locationInfo?.country?.id
+            stateId = locationInfo?.state?.id
+            cityId = locationInfo?.city?.id
+            data.apply {
+                user.firstName = userEventData.firstName
+                user.description = userEventData.description
+                user.image = userEventData.image
+                user.locationInfo = locationInfo
             }
+            searchService.createSearchItem(id, fullName, SearchTypeEnum.FullNameUser)
+            return userReadRepository.save(this)
+        }
     }
 
     fun updateCompany(company: CompanyReadEntity) {

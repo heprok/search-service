@@ -6,8 +6,14 @@ import java.time.LocalDate
 import java.util.UUID
 
 data class UserJobPositionCreatedEvent(override val data: UserJobPositionEventData) : Event<UserJobPositionEventData>("1.0")
-data class UserJobPositionUpdatedEvent(override val data: UserJobPositionEventData) : Event<UserJobPositionEventData>("1.0")
-data class UserJobPositionDeletedEvent(override val data: UserJobPositionDeleteEventData) : Event<UserJobPositionDeleteEventData>("1.0")
+data class UserJobPositionUpdatedEvent(override val data: UserJobPositionEventData) :
+    Event<UserJobPositionEventData>("1.0")
+
+data class UserJobPositionSyncEvent(override val data: UserJobPositionEventData) :
+    Event<UserJobPositionEventData>("1.0")
+
+data class UserJobPositionDeletedEvent(override val data: UserJobPositionDeleteEventData) :
+    Event<UserJobPositionDeleteEventData>("1.0")
 
 data class UserJobPositionEventData(
     @JsonProperty

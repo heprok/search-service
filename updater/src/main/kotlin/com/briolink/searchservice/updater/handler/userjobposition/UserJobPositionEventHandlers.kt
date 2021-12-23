@@ -2,6 +2,7 @@ package com.briolink.searchservice.updater.handler.userjobposition
 
 import com.briolink.event.IEventHandler
 import com.briolink.event.annotation.EventHandler
+import com.briolink.event.annotation.EventHandlers
 
 @EventHandler("UserJobPositionCreatedEvent", "1.0")
 class UserJobPositionEventCreatedHandler(
@@ -12,7 +13,10 @@ class UserJobPositionEventCreatedHandler(
     }
 }
 
-@EventHandler("UserJobPositionUpdatedEvent", "1.0")
+@EventHandlers(
+    EventHandler("UserJobPositionUpdatedEvent", "1.0"),
+    EventHandler("UserJobPositionSyncEvent", "1.0"),
+)
 class UserJobPositionEventUpdatedHandler(
     private val userJobPositionHandlerService: UserJobPositionHandlerService
 ) : IEventHandler<UserJobPositionUpdatedEvent> {

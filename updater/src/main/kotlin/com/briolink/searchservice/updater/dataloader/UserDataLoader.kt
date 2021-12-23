@@ -33,7 +33,7 @@ class UserDataLoader(
         if (userReadRepository.count().toInt() == 0) {
             val mutableListUser = mutableListOf<UserReadEntity>()
             for (i in 1..COUNT_USER) {
-                userHandlerService.create(
+                userHandlerService.createOrUpdate(
                     userEventData = UserEventData(
                         id = UUID.randomUUID(),
                         slug = listFirstName.random(),
@@ -46,7 +46,7 @@ class UserDataLoader(
             }
 
             mutableListUser.forEach {
-                userHandlerService.update(
+                userHandlerService.createOrUpdate(
                     userEventData = UserEventData(
                         id = it.id,
                         slug = it.data.user.slug,
