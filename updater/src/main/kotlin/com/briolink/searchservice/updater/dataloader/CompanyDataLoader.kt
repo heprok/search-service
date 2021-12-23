@@ -114,7 +114,7 @@ class CompanyDataLoader(
         if (companyReadRepository.count().toInt() == 0) {
             val mutableListCompanyRead = mutableListOf<CompanyReadEntity>()
             listCompanyName.forEachIndexed { i, name ->
-                companyHandlerService.createCompany(
+                companyHandlerService.createOrUpdate(
                     companyEventData = CompanyEventData(
                         id = UUID.randomUUID(),
                         name = name,
@@ -127,7 +127,7 @@ class CompanyDataLoader(
             }
 
             mutableListCompanyRead.forEachIndexed { index, it ->
-                companyHandlerService.updateCompany(
+                companyHandlerService.createOrUpdate(
                     companyEventData = CompanyEventData(
                         id = it.id,
                         name = it.name + " /update",

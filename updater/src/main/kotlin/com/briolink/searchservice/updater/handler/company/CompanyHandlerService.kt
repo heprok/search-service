@@ -18,48 +18,38 @@ class CompanyHandlerService(
     private val locationService: LocationService,
 ) {
 
-    fun createCompany(companyEventData: CompanyEventData): CompanyReadEntity {
-        CompanyReadEntity(companyEventData.id).apply {
+    fun createOrUpdate(companyEventData: CompanyEventData): CompanyReadEntity {
+        companyReadRepository.findById(companyEventData.id).orElse(
+            CompanyReadEntity(companyEventData.id).apply {
+                data = CompanyReadEntity.Data(slug = companyEventData.slug)
+            }
+        ).apply {
+            val locationInfo = companyEventData.locationId?.let { locationService.getLocation(it) }
+            companyEventData.occupation?.also {
+                searchService.createSearchItem(it.id, it.name, SearchTypeEnum.CompanyOccupationName)
+            }
+            companyEventData.industry?.also {
+                searchService.createSearchItem(it.id, it.name, SearchTypeEnum.CompanyIndustryName)
+            }
             searchService.createSearchItem(companyEventData.id, companyEventData.name, SearchTypeEnum.CompanyName)
+
             name = companyEventData.name
-            data = CompanyReadEntity.Data(
-                website = companyEventData.website,
-                slug = companyEventData.slug,
-            )
+            industryId = companyEventData.industry?.id
+            occupationId = companyEventData.occupation?.id
+            countryId = locationInfo?.country?.id
+            stateId = locationInfo?.state?.id
+            cityId = locationInfo?.city?.id
+            data.apply {
+                website = companyEventData.website
+                slug = companyEventData.slug
+                logo = companyEventData.logo
+                description = companyEventData.description
+                industryName = companyEventData.industry?.name
+                occupationName = companyEventData.occupation?.name
+                location = locationInfo
+            }
             return companyReadRepository.save(this)
         }
-    }
-
-    fun updateCompany(companyEventData: CompanyEventData): CompanyReadEntity {
-        companyReadRepository.findById(companyEventData.id)
-            .orElseThrow { throw EntityNotFoundException("Company ${companyEventData.id} not found") } // ktlint-disable max-line-length
-            .apply {
-                val locationInfo = companyEventData.locationId?.let { locationService.getLocation(it) }
-                companyEventData.occupation?.also {
-                    searchService.createSearchItem(it.id, it.name, SearchTypeEnum.CompanyOccupationName)
-                }
-                companyEventData.industry?.also {
-                    searchService.createSearchItem(it.id, it.name, SearchTypeEnum.CompanyIndustryName)
-                }
-                searchService.createSearchItem(companyEventData.id, companyEventData.name, SearchTypeEnum.CompanyName)
-
-                name = companyEventData.name
-                industryId = companyEventData.industry?.id
-                occupationId = companyEventData.occupation?.id
-                countryId = locationInfo?.country?.id
-                stateId = locationInfo?.state?.id
-                cityId = locationInfo?.city?.id
-                data.apply {
-                    website = companyEventData.website
-                    slug = companyEventData.slug
-                    logo = companyEventData.logo
-                    description = companyEventData.description
-                    industryName = companyEventData.industry?.name
-                    occupationName = companyEventData.occupation?.name
-                    location = locationInfo
-                }
-                return companyReadRepository.save(this)
-            }
     }
 
     fun refreshStats(companyStatisticEventData: CompanyStatisticEventData) {

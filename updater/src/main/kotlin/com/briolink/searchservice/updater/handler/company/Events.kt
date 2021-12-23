@@ -69,4 +69,5 @@ enum class ConnectionCompanyRoleType(val value: Int) {
 
 data class CompanyCreatedEvent(override val data: CompanyEventData) : Event<CompanyEventData>("1.0")
 data class CompanyUpdatedEvent(override val data: CompanyEventData) : Event<CompanyEventData>("1.0")
+data class CompanySyncEvent(override val data: CompanyEventData) : Event<CompanyEventData>("1.0")
 data class CompanyStatisticEvent(override val data: CompanyStatisticEventData) : Event<CompanyStatisticEventData>("1.0")
