@@ -4,6 +4,7 @@ type CompanyService {
     slug: String!
     image: Image
     company: Company!
+    description: String
     price: Float
 }
 

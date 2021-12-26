@@ -66,6 +66,7 @@ fun CompanyServiceCard.Companion.fromEntity(entity: CompanyServiceReadEntity) = 
         slug = entity.data.slug,
         image = entity.data.image?.let { Image(it) },
         price = entity.price,
+        description = entity.data.description,
         company = Company.fromEntity(entity.data.company),
     ),
     numberOfUses = entity.numberOfUses
