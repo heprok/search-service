@@ -34,11 +34,7 @@ class CompanyServiceQuery(
     ): CompanyServiceCardList {
         val filterDto = CompanyServiceFiltersDto(
             searchText = filter?.searchText,
-            serviceIds = filter?.serviceNameIds?.let { listIds ->
-                mutableListOf<UUID>().apply {
-                    listIds.forEach { addAll(it.split(";").map { UUID.fromString(it) }) }
-                }
-            },
+            serviceNames = filter?.serviceNames,
             companyIndustryIds = filter?.industryIds?.map { UUID.fromString(it) },
             companyIds = filter?.companyIds?.map { UUID.fromString(it) },
             priceMax = filter?.rangePrice?.max,
@@ -73,8 +69,6 @@ class CompanyServiceQuery(
     @PreAuthorize("isAuthenticated()")
     fun getCompanyServiceName(
         @InputArgument query: String?
-    ): List<IdNameItem> =
-        autocompleteService.getCompanyServiceName(query).map {
-            IdNameItem(it.objectIds.joinToString(";"), it.name)
-        }
+    ): List<String> =
+        autocompleteService.getCompanyServiceName(query).map { it.name }
 }

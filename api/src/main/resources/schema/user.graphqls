@@ -36,7 +36,7 @@ input UserCardFilterParameter {
     searchText: String
     currentPlaceWorkCompanyIds: [ID!]
     previousPlaceWorkCompanyIds: [ID!]
-    jobPositionTitleIds: [ID!]
+    jobPositionTitles: [String!]
     industryIds: [ID!]
     locationIds: [ID!]
 }

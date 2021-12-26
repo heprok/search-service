@@ -36,9 +36,8 @@ class UserReadEntity(
     @Column(name = "previous_place_of_work_company_ids", nullable = false, columnDefinition = "uuid[]")
     var previousPlaceOfWorkCompanyIds: MutableList<UUID> = mutableListOf()
 
-    @Type(type = "pg-uuid")
-    @Column(name = "job_position_id")
-    var jobPositionId: UUID? = null
+    @Column(name = "job_position_title", length = 255)
+    var jobPositionTitle: String? = null
 
     @Column(name = "number_of_verification", nullable = false)
     var numberOfVerification: Int = 0

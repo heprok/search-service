@@ -19,7 +19,7 @@ interface UserReadRepository : JpaRepository<UserReadEntity, UUID> {
               SELECT
                  jsonb_agg( 
                      CASE
-                        WHEN e ->> 'companyId' = :companyId
+                        WHEN e ->> 'companyId' =  CAST(:companyId as uuid)
                         THEN 
                             jsonb_set(e, '{name}', to_jsonb(cast(:name as varchar))) 
                             jsonb_set(e, '{slug}', to_jsonb(cast(:slug as varchar))) 
@@ -30,7 +30,7 @@ interface UserReadRepository : JpaRepository<UserReadEntity, UUID> {
              FROM jsonb_array_elements(data -> 'previousPlaceOfWorkCompanies') e
             )
         ) 
-        WHERE previousPlaceOfWorkCompanyIds @> :companyId""",
+        WHERE previousPlaceOfWorkCompanyIds @> CAST(:companyId as uuid) """,
         nativeQuery = true
     )
     fun updatePreviousPlaceWork(
@@ -62,12 +62,12 @@ interface UserReadRepository : JpaRepository<UserReadEntity, UUID> {
             WHERE c.currentPlaceOfWorkCompanyId = :companyId""",
     )
     fun updateCurrentPlaceWork(
-        companyId: UUID,
-        name: String,
-        slug: String,
-        logo: String?,
-        industryId: UUID?,
-        industryName: String?
+        @Param("companyId") companyId: UUID,
+        @Param("name") name: String,
+        @Param("slug") slug: String,
+        @Param("logo") logo: String?,
+        @Param("industryId") industryId: UUID?,
+        @Param("industryName") industryName: String?
     )
 
     @Modifying
