@@ -36,7 +36,7 @@ class UserQuery(
             searchText = filter?.searchText,
             currentPlaceWorkCompanyIds = filter?.currentPlaceWorkCompanyIds?.map { UUID.fromString(it) },
             previousPlaceWorkCompanyIds = filter?.previousPlaceWorkCompanyIds?.map { UUID.fromString(it) },
-            jobPositionTitleIds = filter?.jobPositionTitleIds?.map { UUID.fromString(it) },
+            jobPositionTitles = filter?.jobPositionTitle,
             companyIndustryIds = filter?.industryIds?.map { UUID.fromString(it) },
             locationIds = filter?.locationIds?.map { LocationId.fromString(it) }
         )
@@ -70,8 +70,6 @@ class UserQuery(
     @PreAuthorize("isAuthenticated()")
     fun getUserJobPositionTitle(
         @InputArgument query: String?
-    ): List<IdNameItem> =
-        autocompleteService.getJobPositionTitle(query).map {
-            IdNameItem(id = it.objectIds.joinToString(";"), name = it.name)
-        }
+    ): List<String> =
+        autocompleteService.getJobPositionTitle(query).map { it.name }
 }

@@ -34,7 +34,7 @@ class UserJobPositionHandlerService(
             if (userJobPositionEventData.isCurrent) {
                 industryId = companyReadEntity.industryId
                 data.industryName = companyReadEntity.data.industryName
-                jobPositionId = userJobPositionEventData.id
+                jobPositionTitle = userJobPositionEventData.title
                 currentPlaceOfWorkCompanyId = companyReadEntity.id
                 data.currentPlaceOfWorkCompany = placeOfWork
             } else {
@@ -71,7 +71,7 @@ class UserJobPositionHandlerService(
             )
 
             if (userJobPositionEventData.isCurrent) {
-                jobPositionId = userJobPositionEventData.id
+                jobPositionTitle = userJobPositionEventData.title
                 industryId = companyReadEntity.industryId
                 data.industryName = companyReadEntity.data.industryName
                 if (data.currentPlaceOfWorkCompany == null) {
@@ -112,7 +112,7 @@ class UserJobPositionHandlerService(
                 }
                 industryId = null
                 data.industryName = null
-                jobPositionId = null
+                jobPositionTitle = null
                 currentPlaceOfWorkCompanyId = null
                 data.currentPlaceOfWorkCompany = null
             } else {

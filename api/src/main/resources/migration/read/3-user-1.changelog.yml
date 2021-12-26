@@ -28,8 +28,8 @@ databaseChangeLog:
                   name: previous_place_of_work_company_ids
                   type: uuid[]
               - column:
-                  name: job_position_id
-                  type: uuid
+                  name: job_position_title
+                  type: varchar(255)
               - column:
                   name: number_of_verification
                   type: int
@@ -86,8 +86,8 @@ databaseChangeLog:
         - createIndex:
             columns:
               - column:
-                  name: job_position_id
-            indexName: idx_user_job_position__id
+                  name: job_position_title
+            indexName: idx_user_job_position_title
             schemaName: read
             tableName: user
         - createIndex:

@@ -5,7 +5,7 @@ import java.util.UUID
 
 data class CompanyServiceFiltersDto(
     val searchText: String? = null,
-    val serviceIds: List<UUID>? = null,
+    val serviceNames: List<String>? = null,
     val companyIndustryIds: List<UUID>? = null,
     val companyIds: List<UUID>? = null,
     val priceMax: Double? = null,

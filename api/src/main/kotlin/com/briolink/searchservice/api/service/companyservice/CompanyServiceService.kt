@@ -46,7 +46,7 @@ class CompanyServiceService(
 
             if (!companyIndustryIds.isNullOrEmpty()) cb.where("industryId").`in`(companyIndustryIds)
             if (!companyIds.isNullOrEmpty()) cb.where("companyId").`in`(companyIds)
-            if (!serviceIds.isNullOrEmpty()) cb.where("id").`in`(serviceIds)
+            if (!serviceNames.isNullOrEmpty()) cb.where("name").`in`(serviceNames)
             if (priceMax != null || priceMin != null) {
                 if (priceMax == null)
                     cb.where("price").ge(priceMin)

@@ -55,7 +55,7 @@ class UserService(
                         TypedParameterValue(UUIDArrayType.INSTANCE, previousPlaceWorkCompanyIds.toTypedArray())
                     )
             }
-            if (!jobPositionTitleIds.isNullOrEmpty()) cb.where("positionTitleId").`in`(jobPositionTitleIds)
+            if (!jobPositionTitles.isNullOrEmpty()) cb.where("jobPositionTitle").`in`(jobPositionTitles)
             if (!companyIndustryIds.isNullOrEmpty()) cb.where("industryId").`in`(companyIndustryIds)
             if (!locationIds.isNullOrEmpty()) {
                 val countryIds = locationIds.filter { it.type == LocationTypeEnum.Country }.map { it.id }
