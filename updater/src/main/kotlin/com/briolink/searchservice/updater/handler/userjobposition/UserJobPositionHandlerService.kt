@@ -85,13 +85,13 @@ class UserJobPositionHandlerService(
                 }
             } else {
                 data.previousPlaceOfWorkCompanies.firstOrNull { it.userJobPositionId == placeOfWork.userJobPositionId }
-                    ?.also { previousPlaceWork ->
-                        if (previousPlaceWork.companyId != placeOfWork.companyId) {
+                    .also { previousPlaceWork ->
+                        if (previousPlaceWork != null && previousPlaceWork.companyId != placeOfWork.companyId) {
                             previousPlaceOfWorkCompanyIds.removeAt(previousPlaceOfWorkCompanyIds.indexOfFirst { it == previousPlaceWork.companyId }) // ktlint-disable max-line-length
                             data.previousPlaceOfWorkCompanies.remove(previousPlaceWork)
-                            data.previousPlaceOfWorkCompanies.add(placeOfWork)
-                            previousPlaceOfWorkCompanyIds.add(placeOfWork.companyId)
                         }
+                        data.previousPlaceOfWorkCompanies.add(placeOfWork)
+                        previousPlaceOfWorkCompanyIds.add(placeOfWork.companyId)
                     }
             }
 
