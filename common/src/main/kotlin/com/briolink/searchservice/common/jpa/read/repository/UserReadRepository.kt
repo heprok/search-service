@@ -51,7 +51,7 @@ interface UserReadRepository : JpaRepository<UserReadEntity, UUID> {
                     '{currentPlaceOfWorkCompany,logo}', :logo, text,
                     '{industryName}', :industryName, text
            ),
-                c._keywordsSearch = concat_ws('~;~',
+                c._keywordsSearch = function('concat_ws', '~;~',
                     c.fullName,
                     function('jsonb_get', c.data, currentPlaceOfWorkCompany, companyName),
                     :industryName,

@@ -14,7 +14,7 @@ class ConcatWsFunc : SQLFunction {
 
         val sep = args.first()
         val arguments = args.toMutableList().apply { removeFirst() }.map { it ?: "" }
-        return "concat_ws('$sep', ${arguments.joinToString { "," }})"
+        return "concat_ws($sep, ${arguments.joinToString { "," }})"
     }
 
     @Throws(QueryException::class)
