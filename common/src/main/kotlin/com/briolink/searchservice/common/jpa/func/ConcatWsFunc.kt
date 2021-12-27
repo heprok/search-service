@@ -4,7 +4,7 @@ import org.hibernate.QueryException
 import org.hibernate.dialect.function.SQLFunction
 import org.hibernate.engine.spi.Mapping
 import org.hibernate.engine.spi.SessionFactoryImplementor
-import org.hibernate.type.BooleanType
+import org.hibernate.type.StringType
 import org.hibernate.type.Type
 
 class ConcatWsFunc : SQLFunction {
@@ -14,12 +14,12 @@ class ConcatWsFunc : SQLFunction {
 
         val sep = args.first()
         val arguments = args.toMutableList().apply { removeFirst() }.map { it ?: "" }
-        return "concat_ws($sep, ${arguments.joinToString { "," }})"
+        return "concat_ws($sep, ${arguments.joinToString(",")})"
     }
 
     @Throws(QueryException::class)
     override fun getReturnType(columnType: Type?, mapping: Mapping?): Type {
-        return BooleanType()
+        return StringType()
     }
 
     override fun hasArguments(): Boolean {

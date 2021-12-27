@@ -24,7 +24,7 @@ interface CompanyServiceReadRepository : JpaRepository<CompanyServiceReadEntity,
                     '{occupationName}', :occupationName, text,
                     '{location}', :locationJson, jsonb
            ), 
-                c._keywordsSearch = function('concat_ws', '~;~', c.name, :name, :occupationName, :industryName, :location, jsonb_get(c.data, description))
+                c._keywordsSearch = function('concat_ws', '~;~', c.name, :name, :occupationName, :industryName, :location, function('jsonb_get', c.data, 'description'))
             WHERE c.companyId = :companyId""",
     )
     fun updateCompany(

@@ -19,18 +19,19 @@ interface UserReadRepository : JpaRepository<UserReadEntity, UUID> {
               SELECT
                  jsonb_agg( 
                      CASE
-                        WHEN e ->> 'companyId' =  CAST(:companyId as uuid)
+                        WHEN e ->> 'companyId' = :companyId
                         THEN 
-                            jsonb_set(e, '{name}', to_jsonb(cast(:name as varchar))) 
-                            jsonb_set(e, '{slug}', to_jsonb(cast(:slug as varchar))) 
-                            jsonb_set(e, '{logo}', to_jsonb(cast(:logo as varchar))) 
+                            jsonb_set(jsonb_set(jsonb_set( e,
+                                '{name}', to_jsonb(cast(:name as varchar))), 
+                                '{slug}', to_jsonb(cast(:slug as varchar))),
+                                '{logo}', to_jsonb(cast(:logo as varchar))) 
                         ELSE e 
                      END
                  )
              FROM jsonb_array_elements(data -> 'previousPlaceOfWorkCompanies') e
             )
         ) 
-        WHERE previousPlaceOfWorkCompanyIds @> CAST(:companyId as uuid) """,
+        WHERE previous_place_of_work_company_ids @> array[CAST(:companyId as uuid)]""",
         nativeQuery = true
     )
     fun updatePreviousPlaceWork(
@@ -53,11 +54,11 @@ interface UserReadRepository : JpaRepository<UserReadEntity, UUID> {
            ),
                 c._keywordsSearch = function('concat_ws', '~;~',
                     c.fullName,
-                    function('jsonb_get', c.data, currentPlaceOfWorkCompany, companyName),
+                    function('jsonb_get', c.data, 'currentPlaceOfWorkCompany', 'companyName'),
                     :industryName,
-                    function('jsonb_get', c.data, user, location),
-                    function('jsonb_get', c.data, currentPlaceOfWorkCompany, jobPositionTitle),
-                    function('jsonb_get', c.data, user, description)
+                    function('jsonb_get', c.data, 'user', 'location'),
+                    function('jsonb_get', c.data, 'currentPlaceOfWorkCompany', 'jobPositionTitle'),
+                    function('jsonb_get', c.data, 'user', 'description')
                 )
             WHERE c.currentPlaceOfWorkCompanyId = :companyId""",
     )

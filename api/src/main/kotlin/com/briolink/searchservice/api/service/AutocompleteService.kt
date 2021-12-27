@@ -42,5 +42,5 @@ class AutocompleteService(
         locationService.getLocations(query)
 
     fun getJobPositionTitle(query: String?) =
-        searchReadRepository.getAutocompleteByNameAndType(query, SearchTypeEnum.JobPositionTitleName.value)
+        searchReadRepository.getAutocompleteByNameAndType(query?.ifBlank { null }, SearchTypeEnum.JobPositionTitleName.value)
 }
