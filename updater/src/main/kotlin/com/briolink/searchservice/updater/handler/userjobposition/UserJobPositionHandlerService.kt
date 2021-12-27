@@ -84,14 +84,15 @@ class UserJobPositionHandlerService(
                     data.currentPlaceOfWorkCompany = placeOfWork
                 }
             } else {
-                val previousPlaceOfWorkCompany =
-                    data.previousPlaceOfWorkCompanies.first { it.userJobPositionId == placeOfWork.userJobPositionId }
-                if (previousPlaceOfWorkCompany.companyId != placeOfWork.companyId) {
-                    previousPlaceOfWorkCompanyIds.removeAt(previousPlaceOfWorkCompanyIds.indexOfFirst { it == previousPlaceOfWorkCompany.companyId }) // ktlint-disable max-line-length
-                    data.previousPlaceOfWorkCompanies.remove(previousPlaceOfWorkCompany)
-                    data.previousPlaceOfWorkCompanies.add(placeOfWork)
-                    previousPlaceOfWorkCompanyIds.add(placeOfWork.companyId)
-                }
+                data.previousPlaceOfWorkCompanies.firstOrNull { it.userJobPositionId == placeOfWork.userJobPositionId }
+                    ?.also { previousPlaceWork ->
+                        if (previousPlaceWork.companyId != placeOfWork.companyId) {
+                            previousPlaceOfWorkCompanyIds.removeAt(previousPlaceOfWorkCompanyIds.indexOfFirst { it == previousPlaceWork.companyId }) // ktlint-disable max-line-length
+                            data.previousPlaceOfWorkCompanies.remove(previousPlaceWork)
+                            data.previousPlaceOfWorkCompanies.add(placeOfWork)
+                            previousPlaceOfWorkCompanyIds.add(placeOfWork.companyId)
+                        }
+                    }
             }
 
             userReadRepository.save(this)
@@ -117,14 +118,16 @@ class UserJobPositionHandlerService(
                 data.currentPlaceOfWorkCompany = null
             } else {
                 val previousPlaceOfWorkCompany =
-                    data.previousPlaceOfWorkCompanies.first { it.userJobPositionId == userJobPositionDeleteEventData.id }
-                searchService.deleteSearchItem(
-                    previousPlaceOfWorkCompany.userJobPositionId,
-                    previousPlaceOfWorkCompany.jobPositionTitle,
-                    SearchTypeEnum.JobPositionTitleName
-                )
-                previousPlaceOfWorkCompanyIds.removeAt(previousPlaceOfWorkCompanyIds.indexOfFirst { it == previousPlaceOfWorkCompany.companyId }) // ktlint-disable max-line-length
-                data.previousPlaceOfWorkCompanies.remove(previousPlaceOfWorkCompany)
+                    data.previousPlaceOfWorkCompanies.firstOrNull { it.userJobPositionId == userJobPositionDeleteEventData.id }
+                        ?.also { placeOfWork ->
+                            searchService.deleteSearchItem(
+                                placeOfWork.userJobPositionId,
+                                placeOfWork.jobPositionTitle,
+                                SearchTypeEnum.JobPositionTitleName
+                            )
+                            previousPlaceOfWorkCompanyIds.removeAt(previousPlaceOfWorkCompanyIds.indexOfFirst { it == placeOfWork.companyId }) // ktlint-disable max-line-length
+                            data.previousPlaceOfWorkCompanies.remove(placeOfWork)
+                        }
             }
             userReadRepository.save(this)
         }
