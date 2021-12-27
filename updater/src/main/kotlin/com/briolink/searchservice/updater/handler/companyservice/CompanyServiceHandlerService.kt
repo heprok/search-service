@@ -35,6 +35,7 @@ class CompanyServiceHandlerService(
                 countryId = companyReadEntity.data.location?.country?.id
                 stateId = companyReadEntity.data.location?.state?.id
                 cityId = companyReadEntity.data.location?.city?.id
+                hidden = companyServiceEventData.hidden
                 data = CompanyServiceReadEntity.Data(
                     slug = companyServiceEventData.slug,
                     location = companyReadEntity.data.location,
@@ -61,11 +62,20 @@ class CompanyServiceHandlerService(
                     SearchTypeEnum.CompanyServiceName
                 )
                 name = companyServiceEventData.name
+                hidden = companyServiceEventData.hidden
                 data.description = companyServiceEventData.description
                 price = companyServiceEventData.price
                 data.image = companyServiceEventData.logo
                 return companyServiceReadRepository.save(this)
             }
+    }
+
+    fun sync(companyServiceEventData: CompanyServiceEventData): CompanyServiceReadEntity {
+        companyServiceReadRepository.findById(companyServiceEventData.id).also {
+            if (it.isEmpty)
+                create(companyServiceEventData)
+            return update(companyServiceEventData)
+        }
     }
 
     fun updateCompany(company: CompanyReadEntity) {

@@ -7,6 +7,7 @@ import java.util.UUID
 
 data class CompanyServiceCreatedEvent(override val data: CompanyServiceEventData) : Event<CompanyServiceEventData>("1.0")
 data class CompanyServiceUpdatedEvent(override val data: CompanyServiceEventData) : Event<CompanyServiceEventData>("1.0")
+data class CompanyServiceSyncEvent(override val data: CompanyServiceEventData) : Event<CompanyServiceEventData>("1.0")
 data class CompanyServiceDeletedEvent(override val data: CompanyServiceDeletedData) : Event<CompanyServiceDeletedData>("1.0")
 data class CompanyServiceHideEvent(override val data: CompanyServiceHideData) : Event<CompanyServiceHideData>("1.0")
 data class CompanyServiceStatisticEvent(override val data: CompanyServiceStatisticEventData) :
@@ -25,6 +26,8 @@ data class CompanyServiceEventData(
     val price: Double? = null,
     @JsonProperty
     val description: String? = null,
+    @JsonProperty
+    val hidden: Boolean,
     @JsonProperty
     val logo: URL? = null
 )
