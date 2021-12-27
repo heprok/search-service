@@ -56,7 +56,7 @@ class CompanyHandlerService(
         companyReadRepository.findById(companyStatisticEventData.companyId)
             .orElseThrow { throw EntityNotFoundException("Company ${companyStatisticEventData.companyId} not found") }
             .apply {
-                numberOfVerification = companyStatisticEventData.numberOfVerification
+                numberOfVerification = companyStatisticEventData.numberOfVerifications
                 companyRoleIds = companyStatisticEventData.companyRoles.map { it.id }
                 data.companyRoles = companyStatisticEventData.companyRoles.map {
                     searchService.createSearchItem(it.id, it.name, SearchTypeEnum.CompanyRoleName)

@@ -45,7 +45,7 @@ data class CompanyStatisticEventData(
     @JsonProperty
     val companyId: UUID,
     @JsonProperty
-    val numberOfVerification: Int,
+    val numberOfVerifications: Int,
     @JsonProperty
     val companyRoles: ArrayList<ConnectionCompanyRoleData>
 )
