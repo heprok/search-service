@@ -20,6 +20,14 @@ class CompanyServiceUpdatedEventHandler(
         companyServiceHandlerService.update(event.data)
     }
 }
+@EventHandler("CompanyServiceSyncEvent", "1.0")
+class CompanyServiceSyncEventHandler(
+    private val companyServiceHandlerService: CompanyServiceHandlerService
+) : IEventHandler<CompanyServiceSyncEvent> {
+    override fun handle(event: CompanyServiceSyncEvent) {
+        companyServiceHandlerService.sync(event.data)
+    }
+}
 
 @EventHandler("CompanyServiceDeletedEvent", "1.0")
 class CompanyServiceDeletedEventHandler(

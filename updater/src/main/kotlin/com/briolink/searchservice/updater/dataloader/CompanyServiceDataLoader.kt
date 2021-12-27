@@ -44,6 +44,7 @@ class CompanyServiceDataLoader(
                         companyId = randomCompany.id,
                         name = listName.random(),
                         slug = listName.random(),
+                        hidden = false,
                     )
                 ).also {
                     mutableListService.add(it)
@@ -56,6 +57,7 @@ class CompanyServiceDataLoader(
                         companyId = it.companyId,
                         name = it.name + " /update",
                         slug = it.data.slug,
+                        hidden = false,
                         price = if (Random.nextBoolean()) Random.nextDouble(0.0, 50000.9) else null,
                         description = if (Random.nextBoolean()) "Description" else null,
                         logo = if (Random.nextBoolean()) URL("https://placeimg.com/640/640/tech") else null,
