@@ -89,9 +89,12 @@ class UserJobPositionHandlerService(
                         if (previousPlaceWork != null && previousPlaceWork.companyId != placeOfWork.companyId) {
                             previousPlaceOfWorkCompanyIds.removeAt(previousPlaceOfWorkCompanyIds.indexOfFirst { it == previousPlaceWork.companyId }) // ktlint-disable max-line-length
                             data.previousPlaceOfWorkCompanies.remove(previousPlaceWork)
+                            data.previousPlaceOfWorkCompanies.add(placeOfWork)
+                            previousPlaceOfWorkCompanyIds.add(placeOfWork.companyId)
+                        } else if (previousPlaceWork == null) {
+                            data.previousPlaceOfWorkCompanies.add(placeOfWork)
+                            previousPlaceOfWorkCompanyIds.add(placeOfWork.companyId)
                         }
-                        data.previousPlaceOfWorkCompanies.add(placeOfWork)
-                        previousPlaceOfWorkCompanyIds.add(placeOfWork.companyId)
                     }
             }
 
