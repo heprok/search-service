@@ -1,6 +1,7 @@
 package com.briolink.searchservice.common.jpa.read.entity
 
 import com.briolink.searchservice.common.dto.location.LocationInfoDto
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.hibernate.annotations.Type
 import java.net.URL
@@ -75,6 +76,7 @@ class UserReadEntity(
         var previousPlaceOfWorkCompanies: ArrayList<PlaceOfWork> = arrayListOf()
     )
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     data class PlaceOfWork(
         @JsonProperty
         var companyId: UUID,
