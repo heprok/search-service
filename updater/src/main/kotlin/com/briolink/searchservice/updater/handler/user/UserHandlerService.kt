@@ -1,10 +1,11 @@
 package com.briolink.searchservice.updater.handler.user
 
+import com.briolink.lib.location.model.LocationMinInfo
+import com.briolink.lib.location.service.LocationService
 import com.briolink.searchservice.common.jpa.enumeration.SearchTypeEnum
 import com.briolink.searchservice.common.jpa.read.entity.CompanyReadEntity
 import com.briolink.searchservice.common.jpa.read.entity.UserReadEntity
 import com.briolink.searchservice.common.jpa.read.repository.UserReadRepository
-import com.briolink.searchservice.common.service.LocationService
 import com.briolink.searchservice.updater.service.SearchService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -29,7 +30,7 @@ class UserHandlerService(
                 )
             }
         ).apply {
-            val locationInfo = userEventData.locationId?.let { locationService.getLocation(it) }
+            val locationInfo = userEventData.locationId?.let { locationService.getLocationInfo(it, LocationMinInfo::class.java) }
             fullName = "${userEventData.firstName} ${userEventData.lastName}"
             countryId = locationInfo?.country?.id
             stateId = locationInfo?.state?.id

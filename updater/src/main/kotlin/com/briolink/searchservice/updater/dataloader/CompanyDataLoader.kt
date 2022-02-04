@@ -1,7 +1,7 @@
 package com.briolink.searchservice.updater.dataloader
 
-import com.briolink.searchservice.common.dto.location.LocationId
-import com.briolink.searchservice.common.jpa.enumeration.LocationTypeEnum
+import com.briolink.lib.location.enumeration.TypeLocationEnum
+import com.briolink.lib.location.model.LocationId
 import com.briolink.searchservice.common.jpa.read.entity.CompanyReadEntity
 import com.briolink.searchservice.common.jpa.read.repository.CompanyReadRepository
 import com.briolink.searchservice.updater.handler.company.CompanyEventData
@@ -135,7 +135,7 @@ class CompanyDataLoader(
                         logo = listLogo[index],
                         website = it.data.website,
                         description = listDesciption[index],
-                        locationId = LocationId(Random.nextInt(1, 120), LocationTypeEnum.fromInt(Random.nextInt(0, 2))),
+                        locationId = LocationId(Random.nextInt(1, 120), TypeLocationEnum.values().random()),
                         industry = if (Random.nextBoolean()) listIndustry.random() else null,
                         occupation = if (Random.nextBoolean()) listOccupation.random() else null,
                     )

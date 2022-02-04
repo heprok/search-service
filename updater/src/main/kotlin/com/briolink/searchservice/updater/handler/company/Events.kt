@@ -1,7 +1,7 @@
 package com.briolink.searchservice.updater.handler.company
 
 import com.briolink.event.Event
-import com.briolink.searchservice.common.dto.location.LocationId
+import com.briolink.lib.location.model.LocationId
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.net.URL
 import java.util.UUID

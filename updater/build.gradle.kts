@@ -29,5 +29,4 @@ dependencies {
 
     // kotlin-logging
     implementation("io.github.microutils:kotlin-logging-jvm:${Versions.KOTLIN_LOGGING_JVM}")
-
 }

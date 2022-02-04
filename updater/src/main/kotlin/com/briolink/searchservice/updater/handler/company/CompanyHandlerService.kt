@@ -1,10 +1,11 @@
 package com.briolink.searchservice.updater.handler.company
 
+import com.briolink.lib.location.model.LocationMinInfo
+import com.briolink.lib.location.service.LocationService
 import com.briolink.searchservice.common.jpa.enumeration.CompanyRoleTypeEnum
 import com.briolink.searchservice.common.jpa.enumeration.SearchTypeEnum
 import com.briolink.searchservice.common.jpa.read.entity.CompanyReadEntity
 import com.briolink.searchservice.common.jpa.read.repository.CompanyReadRepository
-import com.briolink.searchservice.common.service.LocationService
 import com.briolink.searchservice.updater.service.SearchService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -24,7 +25,7 @@ class CompanyHandlerService(
                 data = CompanyReadEntity.Data(slug = companyEventData.slug)
             }
         ).apply {
-            val locationInfo = companyEventData.locationId?.let { locationService.getLocation(it) }
+            val locationInfo = companyEventData.locationId?.let { locationService.getLocationInfo(it, LocationMinInfo::class.java) }
             companyEventData.occupation?.also {
                 searchService.createSearchItem(it.id, it.name, SearchTypeEnum.CompanyOccupationName)
             }
