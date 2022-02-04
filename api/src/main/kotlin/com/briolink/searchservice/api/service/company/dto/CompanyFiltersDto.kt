@@ -1,6 +1,6 @@
 package com.briolink.searchservice.api.service.company.dto
 
-import com.briolink.searchservice.common.dto.location.LocationId
+import com.briolink.lib.location.model.LocationId
 import java.util.UUID
 
 class CompanyFiltersDto(

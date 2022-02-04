@@ -4,10 +4,10 @@ import com.blazebit.persistence.CriteriaBuilderFactory
 import com.blazebit.persistence.PagedList
 import com.blazebit.persistence.ParameterHolder
 import com.blazebit.persistence.WhereBuilder
+import com.briolink.lib.location.enumeration.TypeLocationEnum
 import com.briolink.searchservice.api.dto.SortDirectionEnum
 import com.briolink.searchservice.api.service.user.dto.UserFiltersDto
 import com.briolink.searchservice.api.service.user.dto.UserSortDto
-import com.briolink.searchservice.common.jpa.enumeration.LocationTypeEnum
 import com.briolink.searchservice.common.jpa.read.entity.UserReadEntity
 import com.vladmihalcea.hibernate.type.array.UUIDArrayType
 import org.hibernate.jpa.TypedParameterValue
@@ -58,9 +58,9 @@ class UserService(
             if (!jobPositionTitles.isNullOrEmpty()) cb.where("jobPositionTitle").`in`(jobPositionTitles)
             if (!companyIndustryIds.isNullOrEmpty()) cb.where("industryId").`in`(companyIndustryIds)
             if (!locationIds.isNullOrEmpty()) {
-                val countryIds = locationIds.filter { it.type == LocationTypeEnum.Country }.map { it.id }
-                val stateIds = locationIds.filter { it.type == LocationTypeEnum.State }.map { it.id }
-                val cityIds = locationIds.filter { it.type == LocationTypeEnum.City }.map { it.id }
+                val countryIds = locationIds.filter { it.type == TypeLocationEnum.Country }.map { it.id }
+                val stateIds = locationIds.filter { it.type == TypeLocationEnum.State }.map { it.id }
+                val cityIds = locationIds.filter { it.type == TypeLocationEnum.City }.map { it.id }
 
                 cb.whereOr()
                     .where("countryId").`in`(countryIds)

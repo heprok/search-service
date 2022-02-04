@@ -1,6 +1,6 @@
 package com.briolink.searchservice.common.jpa.read.entity
 
-import com.briolink.searchservice.common.dto.location.LocationInfoDto
+import com.briolink.lib.location.model.LocationMinInfo
 import com.briolink.searchservice.common.jpa.enumeration.CompanyRoleTypeEnum
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.hibernate.annotations.Type
@@ -70,7 +70,7 @@ class CompanyReadEntity(
         @JsonProperty
         var description: String? = null,
         @JsonProperty
-        var location: LocationInfoDto? = null,
+        var location: LocationMinInfo? = null,
         @JsonProperty
         var companyRoles: List<CompanyRole> = listOf(),
         @JsonProperty

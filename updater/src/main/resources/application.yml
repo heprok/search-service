@@ -26,9 +26,10 @@ cloud:
   aws:
     stack:
       auto: false
-app:
-  app-endpoints:
-    locationservice: http://location-service.${env.spring_profiles_active}.svc.cluster.local/
+location-service:
+  api:
+    url: http://location-service.${env.spring_profiles_active}.svc.cluster.local/
+    version: 1
 event:
   listener:
     sqs-name: bl-network-${env.spring_profiles_active}-search-service.fifo

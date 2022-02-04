@@ -1,5 +1,6 @@
 package com.briolink.searchservice.api.graphql.query
 
+import com.briolink.lib.location.model.LocationId
 import com.briolink.searchservice.api.dto.SortDirectionEnum
 import com.briolink.searchservice.api.graphql.fromEntity
 import com.briolink.searchservice.api.service.AutocompleteService
@@ -12,7 +13,6 @@ import com.briolink.searchservice.api.types.UserCard
 import com.briolink.searchservice.api.types.UserCardFilterParameter
 import com.briolink.searchservice.api.types.UserCardList
 import com.briolink.searchservice.api.types.UserCardSortParameter
-import com.briolink.searchservice.common.dto.location.LocationId
 import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsQuery
 import com.netflix.graphql.dgs.InputArgument

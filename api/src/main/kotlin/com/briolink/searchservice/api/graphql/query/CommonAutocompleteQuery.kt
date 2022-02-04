@@ -29,7 +29,7 @@ class CommonAutocompleteQuery(
         @InputArgument query: String
     ): List<Location> =
         autocompleteService.getLocations(query)?.map {
-            Location(id = it.id, name = it.name)
+            Location(id = it.locationId.toString(), name = it.name)
         } ?: listOf()
 
     @DgsQuery

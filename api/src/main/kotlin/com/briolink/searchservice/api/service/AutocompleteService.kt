@@ -1,8 +1,8 @@
 package com.briolink.searchservice.api.service
 
+import com.briolink.lib.location.service.LocationService
 import com.briolink.searchservice.common.jpa.enumeration.SearchTypeEnum
 import com.briolink.searchservice.common.jpa.read.repository.SearchReadRepository
-import com.briolink.searchservice.common.service.LocationService
 import org.springframework.stereotype.Service
 
 @Service
@@ -39,8 +39,11 @@ class AutocompleteService(
         searchReadRepository.getAutocompleteByNameAndType(query?.ifBlank { null }, SearchTypeEnum.CompanyRoleName.value)
 
     fun getLocations(query: String) =
-        locationService.getLocations(query)
+        locationService.getSuggestionLocation(query)
 
     fun getJobPositionTitle(query: String?) =
-        searchReadRepository.getAutocompleteByNameAndType(query?.ifBlank { null }, SearchTypeEnum.JobPositionTitleName.value)
+        searchReadRepository.getAutocompleteByNameAndType(
+            query?.ifBlank { null },
+            SearchTypeEnum.JobPositionTitleName.value
+        )
 }

@@ -4,12 +4,11 @@ import com.blazebit.persistence.CriteriaBuilderFactory
 import com.blazebit.persistence.PagedList
 import com.blazebit.persistence.ParameterHolder
 import com.blazebit.persistence.WhereBuilder
+import com.briolink.lib.location.enumeration.TypeLocationEnum
 import com.briolink.searchservice.api.dto.SortDirectionEnum
 import com.briolink.searchservice.api.service.company.dto.CompanyFiltersDto
 import com.briolink.searchservice.api.service.company.dto.CompanySortDto
-import com.briolink.searchservice.common.jpa.enumeration.LocationTypeEnum
 import com.briolink.searchservice.common.jpa.read.entity.CompanyReadEntity
-import com.briolink.searchservice.common.jpa.read.repository.CompanyReadRepository
 import com.vladmihalcea.hibernate.type.array.UUIDArrayType
 import org.hibernate.jpa.TypedParameterValue
 import org.springframework.stereotype.Service
@@ -21,7 +20,6 @@ import javax.persistence.EntityManager
 class CompanyService(
     private val entityManager: EntityManager,
     private val criteriaBuilderFactory: CriteriaBuilderFactory,
-    private val companyReadRepository: CompanyReadRepository,
 ) {
     fun getList(
         filters: CompanyFiltersDto,
@@ -58,9 +56,9 @@ class CompanyService(
             if (!companyIndustryIds.isNullOrEmpty()) cb.where("industryId").`in`(companyIndustryIds)
             if (!companyOccupationIds.isNullOrEmpty()) cb.where("occupationId").`in`(companyOccupationIds)
             if (!locationIds.isNullOrEmpty()) {
-                val countryIds = locationIds.filter { it.type == LocationTypeEnum.Country }.map { it.id }
-                val stateIds = locationIds.filter { it.type == LocationTypeEnum.State }.map { it.id }
-                val cityIds = locationIds.filter { it.type == LocationTypeEnum.City }.map { it.id }
+                val countryIds = locationIds.filter { it.type == TypeLocationEnum.Country }.map { it.id }
+                val stateIds = locationIds.filter { it.type == TypeLocationEnum.State }.map { it.id }
+                val cityIds = locationIds.filter { it.type == TypeLocationEnum.City }.map { it.id }
 
                 cb.whereOr()
                     .where("countryId").`in`(countryIds)

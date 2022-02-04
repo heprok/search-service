@@ -1,9 +1,8 @@
 package com.briolink.searchservice.updater.dataloader
 
-import com.briolink.searchservice.common.dto.location.LocationId
-import com.briolink.searchservice.common.jpa.enumeration.LocationTypeEnum
+import com.briolink.lib.location.enumeration.TypeLocationEnum
+import com.briolink.lib.location.model.LocationId
 import com.briolink.searchservice.common.jpa.read.entity.UserReadEntity
-import com.briolink.searchservice.common.jpa.read.repository.CompanyReadRepository
 import com.briolink.searchservice.common.jpa.read.repository.UserReadRepository
 import com.briolink.searchservice.updater.handler.user.UserEventData
 import com.briolink.searchservice.updater.handler.user.UserHandlerService
@@ -17,7 +16,6 @@ import kotlin.random.Random
 @Order(1)
 class UserDataLoader(
     private var userReadRepository: UserReadRepository,
-    private val companyReadRepository: CompanyReadRepository,
     private val userHandlerService: UserHandlerService,
 ) : DataLoader() {
     val listFirstName: List<String> = listOf(
@@ -54,7 +52,7 @@ class UserDataLoader(
                         lastName = it.data.user.lastName,
                         description = if (Random.nextBoolean()) null else "asdfzxcvpoqkwer",
                         locationId = LocationId(
-                            Random.nextInt(1, 120), LocationTypeEnum.fromInt(Random.nextInt(0, 2))
+                            Random.nextInt(1, 120), TypeLocationEnum.values().random()
                         ),
                         image = if (Random.nextBoolean()) URL("https://placeimg.com/148/148/people") else null,
                     )
