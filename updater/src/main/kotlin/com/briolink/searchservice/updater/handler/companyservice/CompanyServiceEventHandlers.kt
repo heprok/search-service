@@ -2,6 +2,10 @@ package com.briolink.searchservice.updater.handler.companyservice
 
 import com.briolink.event.IEventHandler
 import com.briolink.event.annotation.EventHandler
+import com.briolink.lib.sync.enumeration.UpdaterEnum
+import com.briolink.lib.sync.model.SyncError
+import com.briolink.searchservice.common.jpa.enumeration.ObjectSyncEnum
+import com.briolink.searchservice.updater.service.SyncService
 
 @EventHandler("CompanyServiceCreatedEvent", "1.0")
 class CompanyServiceCreatedEventHandler(
@@ -18,14 +22,6 @@ class CompanyServiceUpdatedEventHandler(
 ) : IEventHandler<CompanyServiceUpdatedEvent> {
     override fun handle(event: CompanyServiceUpdatedEvent) {
         companyServiceHandlerService.update(event.data)
-    }
-}
-@EventHandler("CompanyServiceSyncEvent", "1.0")
-class CompanyServiceSyncEventHandler(
-    private val companyServiceHandlerService: CompanyServiceHandlerService
-) : IEventHandler<CompanyServiceSyncEvent> {
-    override fun handle(event: CompanyServiceSyncEvent) {
-        companyServiceHandlerService.sync(event.data)
     }
 }
 
@@ -53,5 +49,33 @@ class CompanyServiceStatisticEventHandler(
 ) : IEventHandler<CompanyServiceStatisticEvent> {
     override fun handle(event: CompanyServiceStatisticEvent) {
         companyServiceHandlerService.refreshStats(event.data)
+    }
+}
+
+@EventHandler("CompanyServiceSyncEvent", "1.0")
+class CompanyServiceSyncEventHandler(
+    private val companyServiceHandlerService: CompanyServiceHandlerService,
+    private val syncService: SyncService,
+) : IEventHandler<CompanyServiceSyncEvent> {
+    override fun handle(event: CompanyServiceSyncEvent) {
+        val syncData = event.data
+        if (syncData.indexObjectSync.toInt() == 1)
+            syncService.startSync(syncData.syncId, syncData.service)
+        try {
+            companyServiceHandlerService.sync(syncData.objectSync)
+        } catch (ex: Exception) {
+            syncService.sendSyncError(
+                syncError = SyncError(
+                    service = syncData.service,
+                    updater = UpdaterEnum.Search,
+                    syncId = syncData.syncId,
+                    exception = ex,
+                    indexObjectSync = syncData.indexObjectSync,
+                ),
+            )
+        }
+        if (syncData.indexObjectSync == syncData.totalObjectSync) {
+            syncService.completedObjectSync(syncData.syncId, syncData.service, ObjectSyncEnum.CompanyService)
+        }
     }
 }

@@ -33,3 +33,7 @@ location-service:
 event:
   listener:
     sqs-name: bl-network-${env.spring_profiles_active}-search-service.fifo
+sync-service:
+  api:
+    url: http://sync-service.${env.spring_profiles_active}.svc.cluster.local/
+    version: 1

@@ -2,7 +2,10 @@ package com.briolink.searchservice.updater.handler.userjobposition
 
 import com.briolink.event.IEventHandler
 import com.briolink.event.annotation.EventHandler
-import com.briolink.event.annotation.EventHandlers
+import com.briolink.lib.sync.enumeration.UpdaterEnum
+import com.briolink.lib.sync.model.SyncError
+import com.briolink.searchservice.common.jpa.enumeration.ObjectSyncEnum
+import com.briolink.searchservice.updater.service.SyncService
 
 @EventHandler("UserJobPositionCreatedEvent", "1.0")
 class UserJobPositionEventCreatedHandler(
@@ -13,10 +16,7 @@ class UserJobPositionEventCreatedHandler(
     }
 }
 
-@EventHandlers(
-    EventHandler("UserJobPositionUpdatedEvent", "1.0"),
-    EventHandler("UserJobPositionSyncEvent", "1.0"),
-)
+@EventHandler("UserJobPositionUpdatedEvent", "1.0")
 class UserJobPositionEventUpdatedHandler(
     private val userJobPositionHandlerService: UserJobPositionHandlerService
 ) : IEventHandler<UserJobPositionUpdatedEvent> {
@@ -31,5 +31,32 @@ class UserJobPositionEventDeletedHandler(
 ) : IEventHandler<UserJobPositionDeletedEvent> {
     override fun handle(event: UserJobPositionDeletedEvent) {
         userJobPositionHandlerService.delete(event.data)
+    }
+}
+
+@EventHandler("UserJobPositionSyncEvent", "1.0")
+class UserJobPositionSyncEventHandler(
+    private val userJobPositionHandlerService: UserJobPositionHandlerService,
+    private val syncService: SyncService,
+) : IEventHandler<UserJobPositionSyncEvent> {
+    override fun handle(event: UserJobPositionSyncEvent) {
+        val syncData = event.data
+        if (syncData.indexObjectSync.toInt() == 1)
+            syncService.startSync(syncData.syncId, syncData.service)
+        try {
+            userJobPositionHandlerService.update(syncData.objectSync)
+        } catch (ex: Exception) {
+            syncService.sendSyncError(
+                syncError = SyncError(
+                    service = syncData.service,
+                    updater = UpdaterEnum.Search,
+                    syncId = syncData.syncId,
+                    exception = ex,
+                    indexObjectSync = syncData.indexObjectSync,
+                ),
+            )
+        }
+        if (syncData.indexObjectSync == syncData.totalObjectSync)
+            syncService.completedObjectSync(syncData.syncId, syncData.service, ObjectSyncEnum.UserJobPosition)
     }
 }

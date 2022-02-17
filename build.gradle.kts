@@ -39,9 +39,11 @@ allprojects {
 subprojects {
     repositories {
         mavenCentral()
+        mavenLocal()
         setOf(
             29889174, // Briolink Event lib
             33422039, // Briolink Location lib
+//            33688770, // Briolink Sync lib
         ).forEach {
             maven {
                 url = uri("https://gitlab.com/api/v4/projects/$it/packages/maven")
@@ -67,6 +69,7 @@ subprojects {
         // Briolnik Event
         implementation("com.briolink:event:${Versions.BRIOLINK_EVENT}")
         implementation("com.briolink.lib:location:${Versions.BRIOLINK_LOCATION}")
+        implementation("com.briolink.lib:sync:${Versions.BRIOLINK_SYNC}")
         implementation("me.paulschwarz:spring-dotenv:${Versions.SPRING_DOTENV}")
     }
 }
