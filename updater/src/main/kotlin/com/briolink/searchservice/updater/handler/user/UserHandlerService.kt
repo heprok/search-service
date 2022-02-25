@@ -37,8 +37,10 @@ class UserHandlerService(
             cityId = locationInfo?.city?.id
             data.apply {
                 user.firstName = userEventData.firstName
+                user.lastName = userEventData.lastName
                 user.description = userEventData.description
                 user.image = userEventData.image
+                user.slug = userEventData.slug
                 user.locationInfo = locationInfo
             }
             searchService.createSearchItem(id, fullName, SearchTypeEnum.FullNameUser)
