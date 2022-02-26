@@ -3,9 +3,9 @@ package com.briolink.searchservice.updater.handler.company
 import com.briolink.event.IEventHandler
 import com.briolink.event.annotation.EventHandler
 import com.briolink.event.annotation.EventHandlers
+import com.briolink.lib.sync.enumeration.ObjectSyncEnum
 import com.briolink.lib.sync.enumeration.UpdaterEnum
 import com.briolink.lib.sync.model.SyncError
-import com.briolink.searchservice.common.jpa.enumeration.ObjectSyncEnum
 import com.briolink.searchservice.updater.handler.companyservice.CompanyServiceHandlerService
 import com.briolink.searchservice.updater.handler.user.UserHandlerService
 import com.briolink.searchservice.updater.service.SyncService
@@ -48,7 +48,11 @@ class CompanySyncEventHandler(
     override fun handle(event: CompanySyncEvent) {
         val syncData = event.data
         if (syncData.indexObjectSync.toInt() == 1)
-            syncService.startSync(syncData.syncId, syncData.service)
+            syncService.startSyncForService(syncData.syncId, syncData.service)
+        if (syncData.objectSync == null) {
+            syncService.completedObjectSync(syncData.syncId, syncData.service, ObjectSyncEnum.Company)
+            return
+        }
         try {
             companyHandlerService.createOrUpdate(syncData.objectSync).also {
                 companyServiceHandlerService.updateCompany(it)

@@ -79,7 +79,7 @@ data class CompanyEventSyncData(
     @JsonProperty
     override val totalObjectSync: Long,
     @JsonProperty
-    override val objectSync: CompanyEventData
+    override val objectSync: CompanyEventData?
 ) : ISyncData<CompanyEventData>
 
 data class CompanyCreatedEvent(override val data: CompanyEventData) : Event<CompanyEventData>("1.0")

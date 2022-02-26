@@ -3,9 +3,9 @@ package com.briolink.searchservice.updater.handler.user
 import com.briolink.event.IEventHandler
 import com.briolink.event.annotation.EventHandler
 import com.briolink.event.annotation.EventHandlers
+import com.briolink.lib.sync.enumeration.ObjectSyncEnum
 import com.briolink.lib.sync.enumeration.UpdaterEnum
 import com.briolink.lib.sync.model.SyncError
-import com.briolink.searchservice.common.jpa.enumeration.ObjectSyncEnum
 import com.briolink.searchservice.updater.service.SyncService
 
 @EventHandlers(
@@ -37,7 +37,11 @@ class UserSyncEventHandler(
     override fun handle(event: UserSyncEvent) {
         val syncData = event.data
         if (syncData.indexObjectSync.toInt() == 1)
-            syncService.startSync(syncData.syncId, syncData.service)
+            syncService.startSyncForService(syncData.syncId, syncData.service)
+        if (syncData.objectSync == null) {
+            syncService.completedObjectSync(syncData.syncId, syncData.service, ObjectSyncEnum.User)
+            return
+        }
         try {
             userHandlerService.createOrUpdate(syncData.objectSync)
         } catch (ex: Exception) {
