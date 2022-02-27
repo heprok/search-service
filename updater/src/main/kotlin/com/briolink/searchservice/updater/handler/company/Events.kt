@@ -18,7 +18,7 @@ data class CompanyEventData(
     @JsonProperty
     val website: URL? = null,
     @JsonProperty
-    val description: String? = null,
+    val shortDescription: String? = null,
     @JsonProperty
     val locationId: LocationId? = null,
     @JsonProperty

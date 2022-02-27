@@ -55,7 +55,7 @@ fun Company.Companion.fromEntity(entity: CompanyReadEntity) = Company(
     occupation = entity.data.occupationName,
     logo = entity.data.logo?.let { Image(it) },
     location = entity.data.location?.toString(),
-    description = entity.data.description
+    description = entity.data.shortDescription,
 )
 
 // ---------------------------CompanyServices search---------------------------
