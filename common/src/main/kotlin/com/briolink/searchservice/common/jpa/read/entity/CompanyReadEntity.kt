@@ -68,7 +68,7 @@ class CompanyReadEntity(
         @JsonProperty
         var website: URL? = null,
         @JsonProperty
-        var description: String? = null,
+        var shortDescription: String? = null,
         @JsonProperty
         var location: LocationMinInfo? = null,
         @JsonProperty
@@ -98,7 +98,7 @@ class CompanyReadEntity(
             industryName = data.industryName,
             occupationName = data.occupationName,
             location = data.location?.toString(),
-            description = data.description,
+            shortDescription = data.shortDescription,
             companyRoles = data.companyRoles.map { it.name }
         )
     }
@@ -109,7 +109,7 @@ data class CompanyKeywordsSearch(val stringKeywords: String) {
     var industryName: String
     var occupationName: String
     var location: String
-    var description: String
+    var shortDescription: String
     var companyRoles: List<String>
 
     init {
@@ -119,7 +119,7 @@ data class CompanyKeywordsSearch(val stringKeywords: String) {
             industryName = ""
             occupationName = ""
             location = ""
-            description = ""
+            shortDescription = ""
             companyRoles = listOf()
         } else {
             if (keywords.count() != 6) throw Exception("Wrong number of arguments in $stringKeywords must be 6 (companyName~;~industryName~;~occupationName~;~location~;~description~;~companyRoles") // ktlint-disable max-line-length
@@ -127,7 +127,7 @@ data class CompanyKeywordsSearch(val stringKeywords: String) {
             industryName = keywords[1]
             occupationName = keywords[2]
             location = keywords[3]
-            description = keywords[4]
+            shortDescription = keywords[4]
             companyRoles = keywords[5].split(":")
         }
     }
@@ -137,18 +137,18 @@ data class CompanyKeywordsSearch(val stringKeywords: String) {
         industryName: String? = null,
         occupationName: String? = null,
         location: String? = null,
-        description: String? = null,
+        shortDescription: String? = null,
         companyRoles: List<String> = listOf()
     ) : this(
         "$companyName~;~" +
             "${industryName.orEmpty()}~;~" +
             "${occupationName.orEmpty()}~;~" +
             "${location.orEmpty()}~;~" +
-            "${description.orEmpty()}~;~" +
+            "${shortDescription.orEmpty()}~;~" +
             companyRoles.joinToString { ":" }
     )
 
     override fun toString(): String {
-        return "$companyName~;~$industryName~;~$occupationName~;~$location~;~$description~;~ ${companyRoles.joinToString { ":" }}"
+        return "$companyName~;~$industryName~;~$occupationName~;~$location~;~$shortDescription~;~ ${companyRoles.joinToString { ":" }}"
     }
 }

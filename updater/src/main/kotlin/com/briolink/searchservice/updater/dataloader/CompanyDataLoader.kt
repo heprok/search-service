@@ -134,7 +134,7 @@ class CompanyDataLoader(
                         slug = it.data.slug,
                         logo = listLogo[index],
                         website = it.data.website,
-                        description = listDesciption[index],
+                        shortDescription = listDesciption[index],
                         locationId = LocationId(Random.nextInt(1, 120), TypeLocationEnum.values().random()),
                         industry = if (Random.nextBoolean()) listIndustry.random() else null,
                         occupation = if (Random.nextBoolean()) listOccupation.random() else null,

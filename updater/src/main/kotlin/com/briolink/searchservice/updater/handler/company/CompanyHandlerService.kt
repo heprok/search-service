@@ -44,7 +44,7 @@ class CompanyHandlerService(
                 website = companyEventData.website
                 slug = companyEventData.slug
                 logo = companyEventData.logo
-                description = companyEventData.description
+                shortDescription = companyEventData.shortDescription
                 industryName = companyEventData.industry?.name
                 occupationName = companyEventData.occupation?.name
                 location = locationInfo
