@@ -2,9 +2,8 @@ package com.briolink.searchservice.updater.handler.userjobposition
 
 import com.briolink.event.IEventHandler
 import com.briolink.event.annotation.EventHandler
+import com.briolink.lib.sync.SyncEventHandler
 import com.briolink.lib.sync.enumeration.ObjectSyncEnum
-import com.briolink.lib.sync.enumeration.UpdaterEnum
-import com.briolink.lib.sync.model.SyncError
 import com.briolink.searchservice.updater.service.SyncService
 
 @EventHandler("UserJobPositionCreatedEvent", "1.0")
@@ -37,30 +36,17 @@ class UserJobPositionEventDeletedHandler(
 @EventHandler("UserJobPositionSyncEvent", "1.0")
 class UserJobPositionSyncEventHandler(
     private val userJobPositionHandlerService: UserJobPositionHandlerService,
-    private val syncService: SyncService,
-) : IEventHandler<UserJobPositionSyncEvent> {
+    syncService: SyncService,
+) : SyncEventHandler<UserJobPositionSyncEvent>(ObjectSyncEnum.UserJobPosition, syncService) {
     override fun handle(event: UserJobPositionSyncEvent) {
         val syncData = event.data
-        if (syncData.indexObjectSync.toInt() == 1)
-            syncService.startSyncForService(syncData.syncId, syncData.service)
-        if (syncData.objectSync == null) {
-            syncService.completedObjectSync(syncData.syncId, syncData.service, ObjectSyncEnum.UserJobPosition)
-            return
-        }
+        if (!objectSyncStarted(syncData)) return
         try {
-            userJobPositionHandlerService.update(syncData.objectSync)
+            val objectSync = syncData.objectSync!!
+            userJobPositionHandlerService.update(objectSync)
         } catch (ex: Exception) {
-            syncService.sendSyncError(
-                syncError = SyncError(
-                    service = syncData.service,
-                    updater = UpdaterEnum.Search,
-                    syncId = syncData.syncId,
-                    exception = ex,
-                    indexObjectSync = syncData.indexObjectSync,
-                ),
-            )
+            sendError(syncData, ex)
         }
-        if (syncData.indexObjectSync == syncData.totalObjectSync)
-            syncService.completedObjectSync(syncData.syncId, syncData.service, ObjectSyncEnum.UserJobPosition)
+        objectSyncCompleted(syncData)
     }
 }

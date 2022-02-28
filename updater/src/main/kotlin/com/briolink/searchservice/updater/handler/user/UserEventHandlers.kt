@@ -3,9 +3,8 @@ package com.briolink.searchservice.updater.handler.user
 import com.briolink.event.IEventHandler
 import com.briolink.event.annotation.EventHandler
 import com.briolink.event.annotation.EventHandlers
+import com.briolink.lib.sync.SyncEventHandler
 import com.briolink.lib.sync.enumeration.ObjectSyncEnum
-import com.briolink.lib.sync.enumeration.UpdaterEnum
-import com.briolink.lib.sync.model.SyncError
 import com.briolink.searchservice.updater.service.SyncService
 
 @EventHandlers(
@@ -32,30 +31,17 @@ class UserStatisticEventHandler(
 @EventHandler("UserSyncEvent", "1.0")
 class UserSyncEventHandler(
     private val userHandlerService: UserHandlerService,
-    private val syncService: SyncService,
-) : IEventHandler<UserSyncEvent> {
+    syncService: SyncService,
+) : SyncEventHandler<UserSyncEvent>(ObjectSyncEnum.User, syncService) {
     override fun handle(event: UserSyncEvent) {
         val syncData = event.data
-        if (syncData.indexObjectSync.toInt() == 1)
-            syncService.startSyncForService(syncData.syncId, syncData.service)
-        if (syncData.objectSync == null) {
-            syncService.completedObjectSync(syncData.syncId, syncData.service, ObjectSyncEnum.User)
-            return
-        }
+        if (!objectSyncStarted(syncData)) return
         try {
-            userHandlerService.createOrUpdate(syncData.objectSync)
+            val objectSync = syncData.objectSync!!
+            userHandlerService.createOrUpdate(objectSync)
         } catch (ex: Exception) {
-            syncService.sendSyncError(
-                syncError = SyncError(
-                    service = syncData.service,
-                    updater = UpdaterEnum.Search,
-                    syncId = syncData.syncId,
-                    exception = ex,
-                    indexObjectSync = syncData.indexObjectSync
-                )
-            )
+            sendError(syncData, ex)
         }
-        if (syncData.indexObjectSync == syncData.totalObjectSync)
-            syncService.completedObjectSync(syncData.syncId, syncData.service, ObjectSyncEnum.User)
+        objectSyncCompleted(syncData)
     }
 }

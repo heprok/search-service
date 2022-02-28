@@ -2,9 +2,8 @@ package com.briolink.searchservice.updater.handler.companyservice
 
 import com.briolink.event.IEventHandler
 import com.briolink.event.annotation.EventHandler
+import com.briolink.lib.sync.SyncEventHandler
 import com.briolink.lib.sync.enumeration.ObjectSyncEnum
-import com.briolink.lib.sync.enumeration.UpdaterEnum
-import com.briolink.lib.sync.model.SyncError
 import com.briolink.searchservice.updater.service.SyncService
 
 @EventHandler("CompanyServiceCreatedEvent", "1.0")
@@ -55,31 +54,17 @@ class CompanyServiceStatisticEventHandler(
 @EventHandler("CompanyServiceSyncEvent", "1.0")
 class CompanyServiceSyncEventHandler(
     private val companyServiceHandlerService: CompanyServiceHandlerService,
-    private val syncService: SyncService,
-) : IEventHandler<CompanyServiceSyncEvent> {
+    syncService: SyncService,
+) : SyncEventHandler<CompanyServiceSyncEvent>(ObjectSyncEnum.CompanyService, syncService) {
     override fun handle(event: CompanyServiceSyncEvent) {
         val syncData = event.data
-        if (syncData.indexObjectSync.toInt() == 1)
-            syncService.startSyncForService(syncData.syncId, syncData.service)
-        if (syncData.objectSync == null) {
-            syncService.completedObjectSync(syncData.syncId, syncData.service, ObjectSyncEnum.CompanyService)
-            return
-        }
+        if (!objectSyncStarted(syncData)) return
         try {
-            companyServiceHandlerService.sync(syncData.objectSync)
+            val objectSync = syncData.objectSync!!
+            companyServiceHandlerService.sync(objectSync)
         } catch (ex: Exception) {
-            syncService.sendSyncError(
-                syncError = SyncError(
-                    service = syncData.service,
-                    updater = UpdaterEnum.Search,
-                    syncId = syncData.syncId,
-                    exception = ex,
-                    indexObjectSync = syncData.indexObjectSync,
-                ),
-            )
+            sendError(syncData, ex)
         }
-        if (syncData.indexObjectSync == syncData.totalObjectSync) {
-            syncService.completedObjectSync(syncData.syncId, syncData.service, ObjectSyncEnum.CompanyService)
-        }
+        objectSyncCompleted(syncData)
     }
 }

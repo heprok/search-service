@@ -1,8 +1,8 @@
 package com.briolink.searchservice.updater.handler.companyservice
 
 import com.briolink.event.Event
-import com.briolink.lib.sync.ISyncData
-import com.briolink.lib.sync.enumeration.ServiceEnum
+import com.briolink.lib.sync.SyncData
+import com.briolink.lib.sync.SyncEvent
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.net.URL
 import java.util.UUID
@@ -20,7 +20,7 @@ data class CompanyServiceHideEvent(override val data: CompanyServiceHideData) : 
 data class CompanyServiceStatisticEvent(override val data: CompanyServiceStatisticEventData) :
     Event<CompanyServiceStatisticEventData>("1.0")
 
-data class CompanyServiceSyncEvent(override val data: CompanyServiceSyncData) : Event<CompanyServiceSyncData>("1.0")
+data class CompanyServiceSyncEvent(override val data: SyncData<CompanyServiceEventData>) : SyncEvent<CompanyServiceEventData>("1.0")
 
 data class CompanyServiceEventData(
     @JsonProperty
@@ -65,16 +65,3 @@ data class CompanyServiceStatisticEventData(
     @JsonProperty
     val numberOfUses: Int
 )
-
-data class CompanyServiceSyncData(
-    @JsonProperty
-    override val indexObjectSync: Long,
-    @JsonProperty
-    override val service: ServiceEnum,
-    @JsonProperty
-    override val syncId: Int,
-    @JsonProperty
-    override val totalObjectSync: Long,
-    @JsonProperty
-    override val objectSync: CompanyServiceEventData?
-) : ISyncData<CompanyServiceEventData>
