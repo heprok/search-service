@@ -53,7 +53,7 @@ class UserHandlerService(
             companyId = company.id.toString(),
             name = company.name,
             slug = company.data.slug,
-            logo = company.data.logo.toString(),
+            logo = company.data.logo?.toString(),
         )
         userReadRepository.updateCurrentPlaceWork(
             companyId = company.id,

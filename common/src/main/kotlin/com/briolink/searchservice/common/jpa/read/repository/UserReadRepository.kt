@@ -38,7 +38,7 @@ interface UserReadRepository : JpaRepository<UserReadEntity, UUID> {
         @Param("companyId") companyId: String,
         @Param("name") name: String,
         @Param("slug") slug: String,
-        @Param("logo") logo: String,
+        @Param("logo") logo: String?,
     )
 
     @Modifying
