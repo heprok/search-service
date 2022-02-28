@@ -61,7 +61,8 @@ class CompanyReadEntity(
     @Type(type = "jsonb")
     @Column(name = "data", nullable = false, columnDefinition = "jsonb")
     lateinit var data: Data
-
+    
+    @JsonIgnoreProperties(ignoreUnknown = true)
     data class Data(
         @JsonProperty
         var slug: String,
