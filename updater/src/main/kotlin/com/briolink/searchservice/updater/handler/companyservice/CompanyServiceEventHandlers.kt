@@ -2,6 +2,9 @@ package com.briolink.searchservice.updater.handler.companyservice
 
 import com.briolink.event.IEventHandler
 import com.briolink.event.annotation.EventHandler
+import com.briolink.lib.sync.SyncEventHandler
+import com.briolink.lib.sync.enumeration.ObjectSyncEnum
+import com.briolink.searchservice.updater.service.SyncService
 
 @EventHandler("CompanyServiceCreatedEvent", "1.0")
 class CompanyServiceCreatedEventHandler(
@@ -18,14 +21,6 @@ class CompanyServiceUpdatedEventHandler(
 ) : IEventHandler<CompanyServiceUpdatedEvent> {
     override fun handle(event: CompanyServiceUpdatedEvent) {
         companyServiceHandlerService.update(event.data)
-    }
-}
-@EventHandler("CompanyServiceSyncEvent", "1.0")
-class CompanyServiceSyncEventHandler(
-    private val companyServiceHandlerService: CompanyServiceHandlerService
-) : IEventHandler<CompanyServiceSyncEvent> {
-    override fun handle(event: CompanyServiceSyncEvent) {
-        companyServiceHandlerService.sync(event.data)
     }
 }
 
@@ -53,5 +48,23 @@ class CompanyServiceStatisticEventHandler(
 ) : IEventHandler<CompanyServiceStatisticEvent> {
     override fun handle(event: CompanyServiceStatisticEvent) {
         companyServiceHandlerService.refreshStats(event.data)
+    }
+}
+
+@EventHandler("CompanyServiceSyncEvent", "1.0")
+class CompanyServiceSyncEventHandler(
+    private val companyServiceHandlerService: CompanyServiceHandlerService,
+    syncService: SyncService,
+) : SyncEventHandler<CompanyServiceSyncEvent>(ObjectSyncEnum.CompanyService, syncService) {
+    override fun handle(event: CompanyServiceSyncEvent) {
+        val syncData = event.data
+        if (!objectSyncStarted(syncData)) return
+        try {
+            val objectSync = syncData.objectSync!!
+            companyServiceHandlerService.sync(objectSync)
+        } catch (ex: Exception) {
+            sendError(syncData, ex)
+        }
+        objectSyncCompleted(syncData)
     }
 }

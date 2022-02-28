@@ -14,3 +14,7 @@ location-service:
   api:
     url: http://kravchuck.ddns.net:70/
     version: 1
+sync-service:
+  api:
+    url: http://192.168.0.60:8400/
+    version: 1

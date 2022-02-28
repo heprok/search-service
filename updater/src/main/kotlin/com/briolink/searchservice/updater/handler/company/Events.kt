@@ -2,6 +2,8 @@ package com.briolink.searchservice.updater.handler.company
 
 import com.briolink.event.Event
 import com.briolink.lib.location.model.LocationId
+import com.briolink.lib.sync.SyncData
+import com.briolink.lib.sync.SyncEvent
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.net.URL
 import java.util.UUID
@@ -69,5 +71,5 @@ enum class ConnectionCompanyRoleType(val value: Int) {
 
 data class CompanyCreatedEvent(override val data: CompanyEventData) : Event<CompanyEventData>("1.0")
 data class CompanyUpdatedEvent(override val data: CompanyEventData) : Event<CompanyEventData>("1.0")
-data class CompanySyncEvent(override val data: CompanyEventData) : Event<CompanyEventData>("1.0")
 data class CompanyStatisticEvent(override val data: CompanyStatisticEventData) : Event<CompanyStatisticEventData>("1.0")
+data class CompanySyncEvent(override val data: SyncData<CompanyEventData>) : SyncEvent<CompanyEventData>("1.0")

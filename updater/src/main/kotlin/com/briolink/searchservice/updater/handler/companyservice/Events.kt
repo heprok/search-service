@@ -1,17 +1,26 @@
 package com.briolink.searchservice.updater.handler.companyservice
 
 import com.briolink.event.Event
+import com.briolink.lib.sync.SyncData
+import com.briolink.lib.sync.SyncEvent
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.net.URL
 import java.util.UUID
 
-data class CompanyServiceCreatedEvent(override val data: CompanyServiceEventData) : Event<CompanyServiceEventData>("1.0")
-data class CompanyServiceUpdatedEvent(override val data: CompanyServiceEventData) : Event<CompanyServiceEventData>("1.0")
-data class CompanyServiceSyncEvent(override val data: CompanyServiceEventData) : Event<CompanyServiceEventData>("1.0")
-data class CompanyServiceDeletedEvent(override val data: CompanyServiceDeletedData) : Event<CompanyServiceDeletedData>("1.0")
+data class CompanyServiceCreatedEvent(override val data: CompanyServiceEventData) :
+    Event<CompanyServiceEventData>("1.0")
+
+data class CompanyServiceUpdatedEvent(override val data: CompanyServiceEventData) :
+    Event<CompanyServiceEventData>("1.0")
+
+data class CompanyServiceDeletedEvent(override val data: CompanyServiceDeletedData) :
+    Event<CompanyServiceDeletedData>("1.0")
+
 data class CompanyServiceHideEvent(override val data: CompanyServiceHideData) : Event<CompanyServiceHideData>("1.0")
 data class CompanyServiceStatisticEvent(override val data: CompanyServiceStatisticEventData) :
     Event<CompanyServiceStatisticEventData>("1.0")
+
+data class CompanyServiceSyncEvent(override val data: SyncData<CompanyServiceEventData>) : SyncEvent<CompanyServiceEventData>("1.0")
 
 data class CompanyServiceEventData(
     @JsonProperty
@@ -29,7 +38,9 @@ data class CompanyServiceEventData(
     @JsonProperty
     val hidden: Boolean,
     @JsonProperty
-    val logo: URL? = null
+    val logo: URL? = null,
+    @JsonProperty
+    val deleted: Boolean
 )
 
 data class CompanyServiceDeletedData(
