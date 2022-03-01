@@ -32,7 +32,7 @@ interface UserReadRepository : JpaRepository<UserReadEntity, UUID> {
             )
         ) 
         WHERE previous_place_of_work_company_ids @> array[CAST(:companyId as uuid)]""",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun updatePreviousPlaceWork(
         @Param("companyId") companyId: String,
@@ -74,4 +74,12 @@ interface UserReadRepository : JpaRepository<UserReadEntity, UUID> {
     @Modifying
     @Query("UPDATE UserReadEntity c SET c.numberOfVerification = ?2 WHERE c.id = ?1")
     fun updateNumberOfVerification(id: UUID, numberOfVerification: Int)
+
+    @Query(
+        """SELECT count(c) > 1 
+        FROM UserReadEntity c 
+        WHERE function('array_contains', c.previousPlaceOfWorkCompanyIds, ?1) = true OR 
+              function('array_contains', c.currentPlaceOfWorkCompanyId, ?1) = true""",
+    )
+    fun existsByUserJobPositionId(id: UUID): Boolean
 }

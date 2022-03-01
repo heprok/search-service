@@ -47,10 +47,15 @@ class UserJobPositionHandlerService(
             searchService.createSearchItem(
                 userJobPositionEventData.id,
                 userJobPositionEventData.title,
-                SearchTypeEnum.JobPositionTitleName
+                SearchTypeEnum.JobPositionTitleName,
             )
             userReadRepository.save(this)
         }
+    }
+
+    fun createOrUpdate(userJobPositionEventData: UserJobPositionEventData) {
+        if (userReadRepository.existsByUserJobPositionId(userJobPositionEventData.id))
+            update(userJobPositionEventData) else create(userJobPositionEventData)
     }
 
     fun update(userJobPositionEventData: UserJobPositionEventData) {
@@ -61,7 +66,7 @@ class UserJobPositionHandlerService(
         searchService.createSearchItem(
             userJobPositionEventData.id,
             userJobPositionEventData.title,
-            SearchTypeEnum.JobPositionTitleName
+            SearchTypeEnum.JobPositionTitleName,
         )
         userReadEntity.apply {
             val placeOfWork = UserReadEntity.PlaceOfWork(
@@ -93,6 +98,9 @@ class UserJobPositionHandlerService(
                 println(data)
                 data.previousPlaceOfWorkCompanies.firstOrNull { it.userJobPositionId == placeOfWork.userJobPositionId }
                     .also { previousPlaceWork ->
+                        logger.info("previosPlaceWork: $previousPlaceWork")
+                        logger.info("previosPlaceWorkCompanyId: ${previousPlaceWork?.companyId}")
+                        logger.info("placeWork: ${placeOfWork.companyId}")
                         if (previousPlaceWork != null && previousPlaceWork.companyId != placeOfWork.companyId) {
                             logger.info("Remove at previos")
                             previousPlaceOfWorkCompanyIds.removeAt(previousPlaceOfWorkCompanyIds.indexOfFirst { it == previousPlaceWork.companyId }) // ktlint-disable max-line-length

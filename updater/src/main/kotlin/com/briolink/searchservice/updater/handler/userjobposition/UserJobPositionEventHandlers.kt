@@ -43,7 +43,7 @@ class UserJobPositionSyncEventHandler(
         if (!objectSyncStarted(syncData)) return
         try {
             val objectSync = syncData.objectSync!!
-            userJobPositionHandlerService.update(objectSync)
+            userJobPositionHandlerService.createOrUpdate(objectSync)
         } catch (ex: Exception) {
             sendError(syncData, ex)
         }
