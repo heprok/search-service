@@ -81,7 +81,7 @@ class UserJobPositionHandlerService(
                 if (data.currentPlaceOfWorkCompany == null) {
                     currentPlaceOfWorkCompanyId = companyReadEntity.id
                     data.currentPlaceOfWorkCompany = placeOfWork
-                } else if (data.currentPlaceOfWorkCompany!!.userJobPositionId != placeOfWork.userJobPositionId) {
+                } else if (data.currentPlaceOfWorkCompany?.userJobPositionId != placeOfWork.userJobPositionId) {
                     previousPlaceOfWorkCompanyIds.add(data.currentPlaceOfWorkCompany!!.companyId)
                     data.previousPlaceOfWorkCompanies.add(data.currentPlaceOfWorkCompany!!)
                     currentPlaceOfWorkCompanyId = companyReadEntity.id
@@ -89,15 +89,24 @@ class UserJobPositionHandlerService(
                 }
             } else {
                 logger.info("UserJobPosition is not current")
+                println(userJobPositionEventData)
+                println(data)
                 data.previousPlaceOfWorkCompanies.firstOrNull { it.userJobPositionId == placeOfWork.userJobPositionId }
                     .also { previousPlaceWork ->
                         if (previousPlaceWork != null && previousPlaceWork.companyId != placeOfWork.companyId) {
+                            logger.info("Remove at previos")
                             previousPlaceOfWorkCompanyIds.removeAt(previousPlaceOfWorkCompanyIds.indexOfFirst { it == previousPlaceWork.companyId }) // ktlint-disable max-line-length
+                            logger.info("Remove")
                             data.previousPlaceOfWorkCompanies.remove(previousPlaceWork)
+                            logger.info("add previos placework")
                             data.previousPlaceOfWorkCompanies.add(placeOfWork)
+                            logger.info("add previos placework")
                             previousPlaceOfWorkCompanyIds.add(placeOfWork.companyId)
                         } else if (previousPlaceWork == null) {
+                            logger.info("previosPlace work is null")
+                            logger.info("previosPlace add ")
                             data.previousPlaceOfWorkCompanies.add(placeOfWork)
+                            logger.info("previosPlace add ")
                             previousPlaceOfWorkCompanyIds.add(placeOfWork.companyId)
                         }
                     }
