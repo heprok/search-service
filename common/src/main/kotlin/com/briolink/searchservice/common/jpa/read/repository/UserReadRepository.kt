@@ -78,8 +78,8 @@ interface UserReadRepository : JpaRepository<UserReadEntity, UUID> {
     @Query(
         """SELECT count(c) > 1 
         FROM UserReadEntity c 
-        WHERE function('array_contains', c.previousPlaceOfWorkCompanyIds, ?1) = true OR 
-              function('array_contains', c.currentPlaceOfWorkCompanyId, ?1) = true""",
+        WHERE function('array_contains_element', c.previousPlaceOfWorkCompanyIds, ?1) = true OR 
+              function('array_contains_element', c.currentPlaceOfWorkCompanyId, ?1) = true""",
     )
     fun existsByUserJobPositionId(id: UUID): Boolean
 }
