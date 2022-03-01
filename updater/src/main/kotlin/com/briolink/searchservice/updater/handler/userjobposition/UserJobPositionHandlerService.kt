@@ -5,6 +5,7 @@ import com.briolink.searchservice.common.jpa.read.entity.UserReadEntity
 import com.briolink.searchservice.common.jpa.read.repository.CompanyReadRepository
 import com.briolink.searchservice.common.jpa.read.repository.UserReadRepository
 import com.briolink.searchservice.updater.service.SearchService
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.EntityNotFoundException
@@ -16,6 +17,8 @@ class UserJobPositionHandlerService(
     private val userReadRepository: UserReadRepository,
     private val searchService: SearchService
 ) {
+    private val logger = LoggerFactory.getLogger(this::class.java)
+
     fun create(userJobPositionEventData: UserJobPositionEventData) {
         val userReadEntity = userReadRepository.findById(userJobPositionEventData.userId)
             .orElseThrow { throw EntityNotFoundException("User with id ${userJobPositionEventData.userId} not found") }
@@ -69,8 +72,9 @@ class UserJobPositionHandlerService(
                 logo = companyReadEntity.data.logo,
                 jobPositionTitle = userJobPositionEventData.title
             )
-
+            logger.info("Added userJobPosition", userJobPositionEventData)
             if (userJobPositionEventData.isCurrent) {
+                logger.info("UserJobPosition is current")
                 jobPositionTitle = userJobPositionEventData.title
                 industryId = companyReadEntity.industryId
                 data.industryName = companyReadEntity.data.industryName
@@ -84,6 +88,7 @@ class UserJobPositionHandlerService(
                     data.currentPlaceOfWorkCompany = placeOfWork
                 }
             } else {
+                logger.info("UserJobPosition is not current")
                 data.previousPlaceOfWorkCompanies.firstOrNull { it.userJobPositionId == placeOfWork.userJobPositionId }
                     .also { previousPlaceWork ->
                         if (previousPlaceWork != null && previousPlaceWork.companyId != placeOfWork.companyId) {
@@ -97,7 +102,7 @@ class UserJobPositionHandlerService(
                         }
                     }
             }
-
+            logger.info("Info user: ", this)
             userReadRepository.save(this)
         }
     }
