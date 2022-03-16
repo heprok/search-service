@@ -96,7 +96,7 @@ class UserJobPositionHandlerService(
                 logger.info("UserJobPosition is not current")
                 println(userJobPositionEventData)
                 println(data)
-                data.previousPlaceOfWorkCompanies.firstOrNull { it.userJobPositionId == placeOfWork.userJobPositionId }
+                data.previousPlaceOfWorkCompanies.firstOrNull { it?.userJobPositionId == placeOfWork.userJobPositionId }
                     .also { previousPlaceWork ->
                         logger.info("previosPlaceWork: $previousPlaceWork")
                         logger.info("previosPlaceWorkCompanyId: ${previousPlaceWork?.companyId}")

@@ -10,9 +10,11 @@ logging:
 spring:
   jpa:
     show-sql: true
+  datasource:
+    url: jdbc:postgresql://${env.DB_HOST:localhost}:${env.DB_PORT:5432}/dev_search
 location-service:
   api:
-    url: http://kravchuck.ddns.net:70/
+    url: http://192.168.0.60:8070/
     version: 1
 sync-service:
   api:
