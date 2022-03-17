@@ -1,11 +1,9 @@
 package com.briolink.searchservice.updater.handler.connection
 
-import com.briolink.event.annotation.EventHandler
 import com.briolink.lib.event.annotation.EventHandler
 import com.briolink.lib.sync.SyncEventHandler
 import com.briolink.lib.sync.enumeration.ObjectSyncEnum
 import com.briolink.searchservice.updater.service.SyncService
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.event
 
 @EventHandler("ConnectionSyncEvent", "1.0")
 class ConnectionSyncEventHandler(
