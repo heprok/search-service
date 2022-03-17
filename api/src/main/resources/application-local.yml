@@ -16,7 +16,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: https://auth.dev.briolink.com/auth/realms/briolink/protocol/openid-connect/certs
+          jwk-set-uri: https://auth.dev.briolink.com/realms/briolink/protocol/openid-connect/certs
 location-service:
   api:
     url: http://kravchuck.ddns.net:70/
