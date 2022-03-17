@@ -11,9 +11,9 @@ interface CompanyServiceReadRepository : JpaRepository<CompanyServiceReadEntity,
     @Modifying
     @Query(
         """UPDATE CompanyServiceReadEntity c
-           SET c.countryId = :countryId, 
-               c.stateId = :stateId, 
-               c.cityId = :cityId, 
+           SET c.countryId = :countryId,
+               c.stateId = :stateId,
+               c.cityId = :cityId,
                c.industryId = :industryId,
                c.occupationId = :occupationId,
                c.data = function('jsonb_sets', c.data,
@@ -23,7 +23,7 @@ interface CompanyServiceReadRepository : JpaRepository<CompanyServiceReadEntity,
                     '{industryName}', :industryName, text,
                     '{occupationName}', :occupationName, text,
                     '{location}', :locationJson, jsonb
-           ), 
+           ),
                 c._keywordsSearch = function('concat_ws', '~;~', c.name, :name, :occupationName, :industryName, :location, function('jsonb_get', c.data, 'description'))
             WHERE c.companyId = :companyId""",
     )

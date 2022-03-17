@@ -1,4 +1,6 @@
 plugins {
+    application
+
     id("org.springframework.boot")
 
     kotlin("jvm")
@@ -24,8 +26,8 @@ dependencies {
     implementation(kotlin("reflect"))
     implementation(kotlin("stdlib-jdk8"))
 
-    // postgtrsql JDBC Driver
-    runtimeOnly("org.postgresql:postgresql:${Versions.POSTGRESQL}")
+    // PostgreSQL JDBC Driver
+    runtimeOnly("org.postgresql:postgresql")
 
     // kotlin-logging
     implementation("io.github.microutils:kotlin-logging-jvm:${Versions.KOTLIN_LOGGING_JVM}")

@@ -14,23 +14,23 @@ interface UserReadRepository : JpaRepository<UserReadEntity, UUID> {
         """
         UPDATE read.user
         SET
-           data = jsonb_set(data, '{previousPlaceOfWorkCompanies}', 
+           data = jsonb_set(data, '{previousPlaceOfWorkCompanies}',
            (
               SELECT
-                 jsonb_agg( 
+                 jsonb_agg(
                      CASE
                         WHEN e ->> 'companyId' = :companyId
-                        THEN 
+                        THEN
                             jsonb_set(jsonb_set(jsonb_set( e,
-                                '{name}', to_jsonb(cast(:name as varchar))), 
+                                '{name}', to_jsonb(cast(:name as varchar))),
                                 '{slug}', to_jsonb(cast(:slug as varchar))),
-                                '{logo}', to_jsonb(cast(:logo as varchar))) 
-                        ELSE e 
+                                '{logo}', to_jsonb(cast(:logo as varchar)))
+                        ELSE e
                      END
                  )
              FROM jsonb_array_elements(data -> 'previousPlaceOfWorkCompanies') e
             )
-        ) 
+        )
         WHERE previous_place_of_work_company_ids @> array[CAST(:companyId as uuid)]""",
         nativeQuery = true,
     )
@@ -44,7 +44,7 @@ interface UserReadRepository : JpaRepository<UserReadEntity, UUID> {
     @Modifying
     @Query(
         """UPDATE UserReadEntity c
-           SET 
+           SET
                c.industryId = :industryId,
                c.data = function('jsonb_sets', c.data,
                     '{currentPlaceOfWorkCompany,name}', :name, text,
@@ -76,9 +76,9 @@ interface UserReadRepository : JpaRepository<UserReadEntity, UUID> {
     fun updateNumberOfVerification(id: UUID, numberOfVerification: Int)
 
     @Query(
-        """SELECT count(c) > 1 
-        FROM UserReadEntity c 
-        WHERE function('array_contains_element', c.previousPlaceOfWorkCompanyIds, ?1) = true OR 
+        """SELECT count(c) > 1
+        FROM UserReadEntity c
+        WHERE function('array_contains_element', c.previousPlaceOfWorkCompanyIds, ?1) = true OR
               c.currentPlaceOfWorkCompanyId =  ?1""",
     )
     fun existsByUserJobPositionId(id: UUID): Boolean
